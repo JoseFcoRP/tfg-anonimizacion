@@ -55,7 +55,7 @@ def analiza_fichero(ruta, completo = False):
 
 def main():					
 	if len(sys.argv)!=3:
-		print("USO: %s ruta/fichero/o/directorio/a/analizar ruta/salida/brat")
+		print("USO: %s ruta/fichero/o/directorio/a/analizar ruta/salida/brat"%sys.argv[0])
 		return 1
 		
 	if not os.path.isfile(sys.argv[1]):
