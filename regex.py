@@ -20,7 +20,7 @@ regexp_lines = {
 
 def leer_por_lineas(ruta):
     with io.open(ruta,'r', encoding='utf-8') as fichero:
-        return [x[:-2] for x in fichero.readlines()]
+        return [x.replace('\n','') for x in fichero.readlines()]
     
 def leer_completo(ruta):
     with io.open(ruta,'r', encoding='utf-8') as fichero:
@@ -30,7 +30,7 @@ def match_to_brat(lista, ruta_salida):
     T = 1
     with open(ruta_salida,'w') as fichero:
         for el in lista:
-            fichero.write("T%s\t%s\t%s\t%s\t%s\n"%(T,el['tag'],el['match'].start(),el['match'].end()-1,el['match'].group(1)))
+            fichero.write("T%s\t%s\t%s\t%s\t%s\n"%(T,el['tag'],el['start'],el['end'],el['token']))
             T+=1
 			
 
@@ -40,8 +40,10 @@ def analiza_fichero(ruta, completo = False):
 	else:
 		texto = leer_por_lineas(ruta)
 	resultados = []
+	total_index = 0
 	for tag in regexp_lines:
 		for exp in range(len(regexp_lines[tag])):
+			total_index = 0
 			if completo:
 				find = re.search(regexp_lines[tag][exp],texto)
 				if find is not None:
@@ -50,7 +52,9 @@ def analiza_fichero(ruta, completo = False):
 				for line in texto:
 					find = re.search(regexp_lines[tag][exp],line)
 					if find is not None:
-						resultados.append({'tag':tag,'match':find})
+						resultados.append({'tag':tag, 'start':find.start(1)+total_index, 'end':find.end(1)-1+total_index, 'token':find.group(1)})
+					total_index += len(line)+2
+	print(resultados)
 	return resultados
 
 def main():					
@@ -69,7 +73,7 @@ def main():
 	for file in ficheros:
 		if '.txt' not in file:
 			continue
-		resultados = analiza_fichero(file, completo=True)
+		resultados = analiza_fichero(file, completo=False)
 		match_to_brat(resultados,os.path.join(sys.argv[2], os.path.basename(file).split('.')[0]+'.ann'))
 
 main()
