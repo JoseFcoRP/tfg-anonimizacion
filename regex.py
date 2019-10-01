@@ -4,8 +4,8 @@ import sys
 import os
 
 regexp_lines = {
-    "NOMBRE_SUJETO_ASISTENCIA" : [r'Nombre:[\s]*[Dña\.|D\.|Sra.|Sr.]?(([\s]*[A-Z][a-z\.-]+)+)',
-                                  r'Apellidos:[\s]*[Dña\.|D\.|Sra.|Sr.]?(([\s]*[A-Z][a-z\.-]+)+)' ],
+    "NOMBRE_SUJETO_ASISTENCIA" : [r'Nombre:[\s]*[Dña\.|D\.|Sra.|Sr.]?[\s]*(([\s]*[A-Z][a-z]+|[\s]*[A-Z]\.)+)',
+                                  r'Apellidos:[\s]*[Dña\.|D\.|Sra.|Sr.]?[\s]*(([\s]*[A-Z][a-z]+|[\s]*[A-Z]\.)+)' ],
     "EDAD_SUJETO_ASISTENCIA": [r'Edad:[\s]*(\d{2}(\s+[años|dias])?)'],
     "SEXO_SUJETO_ASISTENCIA": [r'Sexo:[\s]*([[H|h]ombre|[M|m]ujer|[V|v]aron|M|m|H|h|V|v])'],
     "FAMILIARES_SUJETO_ASISTENCIA": [],
@@ -14,8 +14,26 @@ regexp_lines = {
                 r'((([L|l]unes|[M|m]artes|[M|m]iercoles|[J|j]ueves|[V|v]iernes|[S|s]abado|[D|d]omingo)\s+)?(\d{1,2}\s*(de)?\s+)?([E|e]nero|[F|f]ebrero|[M|m]arzo|[A|a]bril|[M|m]ayo|[J|j]unio|[J|j]ulio|[A|a]gosto|[S|s]eptiembre|[O|o]ctubre|[N|n]oviembre|[D|d]iciembre)\s+(de|del)?\s*\d{2,4})' ],
     "PROFESIÓN": [],
     "HOSPITAL": [r'(Hospital(\s+[[A-Z][a-z]+|de|del|la|las|el|los])+)'],
-
-    "CORREO_ELECTRÓNICO": [r'([a-zA-Z0-9_+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-\.]+)']
+	"ID_CENTRO_DE_SALUD": [],
+	"INSTITUCION": [],
+	"CALE": [],
+	"TERRITORIO": [],
+	"PAÍS": [],
+	"NÚMERO_TELÉFONO": [],
+	"NÚMERO_FAX": [],
+    "CORREO_ELECTRÓNICO": [r'([a-zA-Z0-9_+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-\.]+)'],
+	"ID_SUJETO_ASISTENCIA": [],
+	"ID_CONTACTO_ASISTENCIAL": [],
+	"ID_ASEGURAMIENTO": [],
+	"ID_TITULACIÓN_PERSONAL_SANITARIO": [],
+	"ID_EMPLEO_PERSONAL_SANITARIO": [],
+	"IDENTIF_VEHÍCULOS_NRSERIE_PLACAS": [],
+	"IDENTIF_DISPOSITIVOS_NRSERIE": [],
+	"DIREC_PROT_INTERNET": [],
+	"URL_WEB": [],
+	"IDENTIF_BIOMÉTRICOS": [],
+	"NUMERO_IDENTIF": [],
+	"OTROS_SUJETO_ASISTENCIA":[]
 }
 
 def leer_por_lineas(ruta):
@@ -52,8 +70,8 @@ def analiza_fichero(ruta, completo = False):
 				for line in texto:
 					find = re.search(regexp_lines[tag][exp],line)
 					if find is not None:
-						resultados.append({'tag':tag, 'start':find.start(1)+total_index, 'end':find.end(1)-1+total_index, 'token':find.group(1)})
-					total_index += len(line)+2
+						resultados.append({'tag':tag, 'start':find.start(1)+total_index, 'end':find.end(1)+total_index, 'token':find.group(1)})
+					total_index += len(line)+1
 	print(resultados)
 	return resultados
 
