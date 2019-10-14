@@ -62,5 +62,5 @@ def predice(prdnlp, text):
     for ent in doc.ents:
             print(ent.text, ent.start_char, ent.end_char, ent.label_)
 			
-def save_model(ruta):
-	prdnlp.to_disk(ruta)
+def save_model(modelo, ruta):
+	modelo.to_disk(ruta)
