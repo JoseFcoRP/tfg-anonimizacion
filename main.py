@@ -13,9 +13,9 @@ def main():
     parser.add_argument('-t', action="store_true", dest='t', default=False)
     parser.add_argument('-p', action="store_true", dest='p',default=False)
     
-    parser.add_argument('-m', action="store", dest='path_model', default="models")
+    parser.add_argument('-m', action="store", dest='path_model', default="model")
     parser.add_argument('-in', action="store", dest='path_in', default="data")
-    parser.add_argument('-out', action="store", dest='path_out', default="models")
+    parser.add_argument('-out', action="store", dest='path_out', default="model")
     parser.add_argument('-i', action="store", dest='iteraciones', type=int, default=20)
     parser.add_argument('-d', action="store", dest='drop', type=float, default=0.2)
     
@@ -36,3 +36,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
