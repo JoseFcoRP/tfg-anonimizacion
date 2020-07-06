@@ -11,14 +11,14 @@ Los datos de entrada para realizar predicciones de las anotaciones a partir de u
 Los parámetros que se le pueden indicar a esta herramienta son los siguientes:
 
  - Para el modo **entrenamiento** debe indicarse el parámetro `-t`, con cualquiera de los siguientes parámetros **opcionales**:
- -- `-in <path>`: Ruta del directorio donde se encuentran los textos.
- -- `-out <path>`: Ruta del directorio donde se desea escribir el modelo.
- -- `-i <n_iteraciones>`: Cantidad de iteraciones que se van a realizar durante el entrenamiento.
- -- `-d <drop>`: Coeficiente de drop para el entrenamiento del modelo (entre 0 y 1).
+   * `-in <path>`: Ruta del directorio donde se encuentran los textos.
+   * `-out <path>`: Ruta del directorio donde se desea escribir el modelo.
+   * `-i <n_iteraciones>`: Cantidad de iteraciones que se van a realizar durante el entrenamiento.
+   * `-d <drop>`: Coeficiente de drop para el entrenamiento del modelo (entre 0 y 1).
  - Para el modo de **predicción** debe indicarse el parámetro `-p`, con cualquiera de los siguientes parámetros **opcionales**:
- -- `-m <path>`: Ruta del directorio donde se encuentra el modelo que realiza las predicciones.
- -- `-in <path>`: Ruta donde se encuentran los ficheros para anotar.
- -- `-out <path>`: Ruta donde se desea escribir las anotaciones del modelo.
+   * `-m <path>`: Ruta del directorio donde se encuentra el modelo que realiza las predicciones.
+   * `-in <path>`: Ruta donde se encuentran los ficheros para anotar.
+   * `-out <path>`: Ruta donde se desea escribir las anotaciones del modelo.
  
  Por defecto la ruta de entrada es *data*, la ruta de salida es *model*, la ruta del modelo es *model*, el número de iteraciones es *20* y el coeficiente de drop es *0.2*.
  
