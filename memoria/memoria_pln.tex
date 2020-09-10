@@ -1,0 +1,739 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Plantilla de memoria en LaTeX para la ETSIT - Universidad Rey Juan Carlos
+%%
+%% Por Gregorio Robles <grex arroba gsyc.urjc.es>
+%%     Grupo de Sistemas y Comunicaciones
+%%     Escuela Técnica Superior de Ingenieros de Telecomunicación
+%%     Universidad Rey Juan Carlos
+%% (muchas ideas tomadas de Internet, colegas del GSyC, antiguos alumnos...
+%%  etc. Muchas gracias a todos)
+%%
+%% La última versión de esta plantilla está siempre disponible en:
+%%     https://github.com/gregoriorobles/plantilla-memoria
+%%
+%% Para obtener PDF, ejecuta en la shell:
+%%   make
+%% (las imágenes deben ir en PNG o JPG)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper, 12pt]{book}
+%\usepackage[T1]{fontenc}
+
+\usepackage[a4paper, left=2.5cm, right=2.5cm, top=3cm, bottom=3cm]{geometry}
+\usepackage{times}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel} % Comenta esta línea si tu memoria es en inglés
+\usepackage[latin1]{inputenx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{url}
+%\usepackage[dvipdfm]{graphicx}
+\usepackage{graphicx}
+\usepackage{float}  %% H para posicionar figuras
+\usepackage[nottoc, notlot, notlof, notindex]{tocbibind} %% Opciones de índice
+\usepackage{latexsym}  %% Logo LaTeX
+\usepackage{schemata}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{url}
+
+%definir bloques de codigo
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=1mm,
+  belowskip=1mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\title{Memoria del Proyecto}
+\author{Jose Fco. Rodríguez Peña}
+
+\renewcommand{\baselinestretch}{1.5}  %% Interlineado
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\begin{document}
+
+\renewcommand{\refname}{Bibliografía}  %% Renombrando
+\renewcommand{\appendixname}{Apéndice}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PORTADA
+
+\begin{titlepage}
+\begin{center}
+\begin{tabular}[c]{c c}
+%\includegraphics[bb=0 0 194 352, scale=0.25]{logo} &
+\includegraphics[scale=0.25]{img/logo_vect.png} &
+\begin{tabular}[b]{l}
+\Huge
+\textsf{UNIVERSIDAD} \\
+\Huge
+\textsf{REY JUAN CARLOS} \\
+\end{tabular}
+\\
+\end{tabular}
+
+\vspace{3cm}
+
+\Large
+GRADO INGENIERÍA DEL SOFTWARE
+
+\vspace{0.4cm}
+
+\large
+Curso Académico 2019/2020
+
+\vspace{0.8cm}
+
+Trabajo Fin de Grado
+
+\vspace{2.5cm}
+
+\LARGE
+Sistema para la anonimización de informes médicos.
+
+\vspace{4cm}
+
+\large
+Autor : José Francisco Rodríguez Peña \\
+Tutora : Soto Montalvo Herranz
+\end{center}
+\end{titlepage}
+
+\newpage
+\mbox{}
+\thispagestyle{empty} % para que no se numere esta pagina
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ÍNDICES %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Las buenas noticias es que los índices se generan automáticamente.
+% Lo único que tienes que hacer es elegir cuáles quieren que se generen,
+% y comentar/descomentar esa instrucción de LaTeX.
+
+%%%% Índice de contenidos
+\tableofcontents 
+%%%% Índice de figuras
+%\cleardoublepage
+%\addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
+%\listoffigures % indice de figuras
+%%%% Índice de tablas
+%\cleardoublepage
+%\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
+%\listoftables % indice de tablas
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% INTRODUCCIÓN %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+\chapter{Introducción}
+En las últimas décadas se puede apreciar una tendencia creciente del uso de la inteligencia artificial en muchos de los productos y servicios que se consumen, en este contexto se aprecia el procesamiento de lenguaje natural como una de las ramas que ha tenido gran impacto en la interacción humano-computador y en el análisis automático de texto y audio, permitiendo nuevas generaciones de chatbots, resumen de información, análisis de sentimiento y detección de entidades entre muchas otras utilidades.\\
+En el ámbito de la salud no ha sido menos relevante dando lugar a concursos y proyectos para la creación de herramientas y algoritmos que permitan hacer uso de la información recopilada para dar valor a esos datos.\\
+En 2006 y 2014 la organización i2b2 propone dos tareas para poder anonimizar de forma efectiva informes clínicos en inglés, posteriormente, en 2019 la iniciativa IberLEF 2019 lanza el reto de realizar esta tarea para textos clínicos en español bajo el nombre de MEDDOCAN (Medical Document Anonymization). En esta tarea se han involucrado algunas organizaciones como el gobierno de España a partir de su plan de impulso de tecnologías del lenguaje, el Centro Nacional de Investigaciones Oncológicas (CNIO) o el Centro Nacional de Supercomputación de Barcelona.\\
+La motivación principal de esta tarea consiste en cumplir con la ley de protección de datos, dado que en la actualidad la información médica no puede ser compartida sin ser anonimizada apropiadamente, esto impide poder realizar muchas investigaciones en el campo del procesamiento de lenguaje natural en medicina debido a la falta de corpus disponible y a las implicaciones de trabajar con datos protegidos en caso de no anonimizar. La resolución exitosa de esta tarea permitirá automatizar este trabajo y abrir paso a futuros proyectos que trabajen con estos datos.
+
+\section{Objetivo}
+La finalidad de este proyecto es identificar los elementos necesarios para una anonimización de textos como la requerida en la tarea, para ello se usará el conjunto de datos proporcionados en MEDDOCAN y se acometerán las dos subtareas que se proponen:
+\begin{itemize}
+\item Sub-track1: detección de etiquetas así como la localización de las mismas.
+\item Sub-track2: detección de datos sensibles a partir de su localización (sin tener en cuenta la categoría).
+\end{itemize}
+Para la evaluación de la calidad del algoritmo se usará la herramienta de evaluación de MEDDOCAN y se realizará un análisis de los resultados para posibles mejoras.\\
+Adicionalmente, como objetivo secundario, se desarrollará una herramienta que permita la detección de cualquier tipo de entidad con la que se haya entrenado.
+
+\section{Conceptos}
+A lo largo de esta lectura se hará mención a algunos conceptos fundamentales para entender el funcionamiento de algunas partes del sistema. Estos se presentan a continuación.
+\subsection{Formato brat para localizar etiquetas}\label{brat}
+Con el fin de tratar la información contenida en un texto es necesario definir un formato para transmitir esta información de forma estructurada, para este problema existen varios formatos estándar, en el caso de este sistema se usará el formato brat \cite{Brat}. A continuación se puede ver un ejemplo.\\
+A partir del texto siguiente:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+Sony formed a joint venture with Ericsson, a mobile phone company based in Sweden.
+Sony announced today that ...
+    }%
+}\\
+
+Al fichero que contiene la información de las etiquetas se le llama \textbf{anotación},  un posible ejemplo sería el siguiente:\\
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+T1\tab Organization 0 4\tab Sony\\
+T2\tab MERGE-ORG 14 27\tab joint venture\\
+T3\tab Organization 33 41\tab Ericsson\\
+T4\tab Country 75 81\tab Sweden
+ }%
+}\\
+
+En este caso se han decidido anotar las organizaciones y los países. Solo se indica la posición y etiquetas, aunque existe más información posible con este formato, en este estudio se va a usar únicamente la información de entidades nombradas.\\
+El formato define que cada linea contiene una etiqueta y en cada linea se tiene en este orden un número de token (T\#), una tabulación, la etiqueta correspondiente, un espacio, el inicio y final del texto correspondiente separado por espacio, una tabulación y el texto al que corresponde. La extensión que se debe indicar para este tipo de ficheros es \textbf{.ann} y es un fichero de texto.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ESTADO DEL ARTE %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+\chapter{Estado del arte}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DESARROLLO %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage % empezamos en página impar
+\chapter{Propuesta de sistema de anonimización}
+El sistema planteado parte de un conjunto de textos anotados que se dividen en datos de entrenamiento, validación y test, se usarán estos datos para crear y validar un modelo de forma que se pueda usar posteriormente para anotar nuevos textos.\\
+
+Para resolver la tarea se pueden diferenciar tres partes fundamentales:
+\begin{itemize}
+\item Entrenamiento: Se preparan los datos de entrenamiento de forma que se identifiquen todas las etiquetas de cada texto para, partiendo de un modelo preentrenado, ajustase al contexto del problema entrenando con estos datos.
+\item Predicción: Una vez se tiene un modelo entrenado en el contexto del problema se pueden realizar predicciones de las etiquetas propuestas en la tarea. En este paso se realiza un postprocesado sobre las predicciones del modelo para encontrar etiquetas específicas.
+\item Validación: Si se desea valorar la efectividad del modelo se puede contrastar las predicciones del modelo contra anotaciones manuales.
+\end{itemize}
+En primer lugar se realizará una fase de selección de modelo donde se ejecutan los tres pasos hasta encontrar un modelo que cumpla las necesidades para pasar la validación, seleccionando el mejor modelo entrenado. Una vez se ha seleccionado un modelo el sistema pasa a una fase de explotación del modelo y se usará para encontrar de manera automática las partes del texto a anonimizar haciendo predicciones sobre los textos que se desee.\\
+La entrada del sistema serán textos anotados en formato brat para el entrenamiento, validación y test. La salida del sistema serán los modelos, predicciones y puntuaciones durante la fase de entrenamiento y únicamente las predicciones en la fase de explotación del modelo.
+\section{Esquema del sistema}\label{esquema}
+Un diagrama general del sistema planteado es el siguiente:
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{img/diagrama_de_flujo.png}\\
+\caption{Flujo del sistema}
+\end{figure}
+Los directorios en los que se divide el sistema son:
+\begin{itemize}
+\item Data: Aquí se encuentran los ficheros en texto plano y anotaciones de los mismos, estos se usarán para entrenar, probar y validar el sistema.
+\item Models: Serán los encargado de realizar las predicciones para resolver la tarea.
+\item Results: En este apartado se encuentran también ficheros en texto plano y anotaciones a los que se llamarán en adelante predicciones del sistema.
+\item Scores: Directorio reservado para las valoraciones de los distintos modelos entrenados.
+\end{itemize}
+Por otro lado los diferentes módulos que se encargan de tratar la información y procesarla son los siguientes:
+\begin{itemize}
+\item Train: A partir de los datos se encarga de entrenar un modelo con los parámetros indicados y dejarlo en el directorio de modelos.
+\item Predict: Usa un modelo y los datos para realizar una predicción de las entidades a anonimizar y guardar el resultado en el directorio de salida.
+\item Postprocess: Repasa todos las predicciones del directorio de salida buscando etiquetas específicas.
+\item Score: Teniendo los datos de salida y los datos de validación genera un informe de etiquetas no encontradas y la puntuación del modelo.
+\end{itemize}
+
+
+
+
+\cleardoublepage % empezamos en página impar
+\chapter{Metodología y Tecnologías}
+Este sistema ha sido desarrollado como un proceso de software iterativo, se han definido diversas funcionalidades del sistema que quedan recogidas y valoradas en las siguientes historias de usuario:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU1: 2PH\\
+Como usuario del sistema.\\
+Quiero que el sistema lea información en formato brat asociada a un texto.\\
+Para poder transmitir al sistema información de la entrada.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU2: 3PH\\
+Como usuario del sistema.\\
+Quiero que el sistema entrene un modelo.\\
+Para poder crear predicciones sobre el texto.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU3: 1PH\\
+Como usuario del sistema.\\
+Quiero que el sistema guarde un modelo.\\
+Para poder utilizarlo sin necesidad de volver a entrenar.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU4: 1PH\\
+Como usuario del sistema.\\
+Quiero que el sistema cargue un modelo.\\
+Para poder utilizarlo sin necesidad de volver a entrenar.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU5: 3PH\\
+Como usuario del sistema.\\
+Quiero que el sistema realice predicciones en formato brat.\\
+Para poder obtener textos etiquetados.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU6: 5PH\\
+Como usuario que valida modelos.\\
+Quiero que el sistema pueda comparar las predicciones contra anotaciones manuales.\\
+Para poder contrastar la validez del sistema.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU7: 3PH\\
+Como usuario que valida modelos.\\
+Quiero que el sistema pueda generar informes a partir de una evaluación.\\
+Para poder contrastar la validez del sistema.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU8: 3PH\\
+Como usuario del sistema.\\
+Quiero que el sistema pueda realizar predicciones a partir de expresiones regulares.\\
+Para poder mejorar las predicciones proporcionadas por los modelos.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU9: 3PH\\
+Como usuario del sistema.\\
+Quiero que el sistema incorpore las predicciones de las expresiones regulares a las proporcionadas por el modelo.\\
+Para poder mejorar las predicciones proporcionadas por los modelos.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU10: 5PH\\
+Como usuario de la herramienta.\\
+Quiero pueda entrenar un modelo y guardarlo.\\
+Para poder automatizar el proceso de entrenamiento.
+    }%
+}\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+HU11: 5PH\\
+Como usuario de la herramienta.\\
+Quiero pueda usar un modelo guardado para generar predicciones.\\
+Para poder automatizar la anotación de textos a partir de un modelo.
+    }%
+}\\
+
+Se realizaron cuatro iteraciones que se describen a continuación.
+\section{Iteración 1}
+En un primer momento se realizó un análisis exploratorio de los datos y se empezó a plantear un sistema basado en expresiones regulares como modelo de predicción, no obstante existían muchas etiquetas que no pueden ser englobadas en expresiones regulares ya que son demasiado generales y variables, por lo que este sistema se descartó.\\
+Se completa la HU1 creando las funciones necesarias para leer el formato brat y asociarlo a su texto correspondiente.
+\section{Iteración 2}
+Se procede a incorporar la herramienta Spacy para usar sus modelos de detección de entidades, se acometen las HU2, HU3 y HU4.\\
+Con los modelos de Spacy se generan salidas en formato brat completando la HU5.\\
+Para puntuar los modelos se hace uso de la herramienta proporcionada por MEDDOCAN, que se ejecuta varias veces en formato script para generar informes de manera automática, adicionalmente se crean scripts para encontrar las etiquetas en las que el modelo falla, en este punto se consideran resueltas las HU6 y HU7.\\
+Se observa que el sistema falla reiteradamente en etiquetas que son fácilmente abarcables por expresiones regulares, dando lugar a incorporar las HU8 y HU9.
+\section{Iteración 3}
+Para compensar las deficiencias del modelo se analizan las etiquetas en las que falla y se crea un sistema de expresiones regulares para realizar predicciones sobre el texto y completar los resultados del modelo con las de este sistema, completando las HU8 y HU9.\\
+En este punto se plantea incorporar parte del sistema a una herramienta que pueda generalizar el trabajo llevado a cabo, incorporando las HU10 y HU11.
+\section{Iteración 4}
+Dado que la mayoría de utilidades ya estaban implementadas el mayor reto fue la gestión de parámetros de entrada y la lectura y escritura desde un contenedor docker. No obstante con la ayuda de librerías y volúmenes se consiguen superar estas dificultades y se completan las HU10 y HU11 creando así una herramienta de automatización para una parte de la tarea.
+
+
+\cleardoublepage % empezamos en página impar
+\chapter{Descripción informática}
+El sistema ha sido implementado en python, para la resolución de las tareas de MEDDOCAN se han usado 4 notebooks de la herramienta Jupyter que permite ejecutar código en una interfaz web. Estos se corresponden a los módulos que se describen en \ref{esquema}.\\
+Adicionalmente se desarrolló una herramienta que permite entrenar modelos de forma automática a partir de textos anotados, aprendiendo las etiquetas incluidas en esos textos.
+\section{Módulos del sistema}
+A continuación se detallan los procesos que se realizan en cada uno de los módulos, aunque se ha implementado un notebook para cada módulo, la herramienta puede sustituir los encargados de entrenar y predecir.
+\subsection{Train}\label{train}
+Prerequisito: Textos y anotaciones en un mismo directorio, para cada fichero de texto con extensión txt debe encontrarse un fichero de anotación en brat con el mismo nombre y extensión ann, además de este se debe tener un directorio destino para guardar modelos.\\
+Salida: Los modelos que se deseen guardados en el directorio destino.\\
+En primer lugar se encuentra el entrenamiento del modelo, antes de comenzar deben prepararse los datos de la forma que Spacy puede usarlos, por ello partimos de dos ficheros, el texto plano y la anotación en brat.\\
+\subsubsection{Estructura de datos de entrada}
+En primer lugar se lee el fichero de texto y se sustituyen todos los saltos de linea por espacios para evitar que se tomen las localizaciones de forma incorrecta. Tras ello se procede a leer el fichero de anotaciones, de este se extraen las etiquetas y localizaciones de las mismas en una lista donde cada elemento es tupla con la estructura (inicio, final, etiqueta) y se corresponde a una entidad.\\
+Cada caso de entrenamiento es una tupla de dos elementos, en primer lugar se encuentra el texto y en segundo lugar se encuentra un diccionario con una sola clave llamada \textit{entities} cuyo valor es una lista con todas las entidades anotadas para el texto.\\
+\subsubsection{Entrenamiento del modelo}
+En primer lugar se carga el modelo de Spacy en español descartando las partes del pipeline que no se corresponden al NER(Named Entity Recognition) dado que será la única parte que se pretende reentrenar.\\
+Para cada iteración se actualiza el modelo entrenando con todos los textos y entidades anotadas, indicando el parámetro \textit{drop} que se corresponde al dropout de la red neuronal que usa el modelo para evitar sobreentrenamiento, mientras más bajo sea este parámetro más difícil le resulta memorizar los datos.\\
+Los valores parámetros que se van a modificar para crear modelos diferentes son el número de iteraciones con las que se entrena y el dropout de la red neuronal.\\
+Finalmente se guarda el modelo en el directorio destinado a ello.
+
+\subsection{Predict}\label{pred}
+Prerequisitos: Tener un modelo entrenado y guardado en el directorio que se indique, así como un directorio donde se encuentren los ficheros de texto que se desean anotar con extensión txt, también debe indicarse el directorio destino de las anotaciones.\\
+Salida: textos originales para anotar junto con su anotación con el mismo nombre y extensión ann.\\
+En este apartado se parte de un modelo entrenado y un directorio con ficheros de texto.\\
+\subsubsection{Predicción del modelo}
+En primer lugar se carga el modelo que se indica en la entrada. Para cada texto se lee completo y se sustituyen los saltos de linea por espacios de la misma forma que los usó el modelo al entrenar, después de eso se realiza una predicción del texto que consiste en un conjunto de entidades de las que se extrae un diccionario con las claves \textit{inicio}, \textit{final}, \textit{etiqueta} y \textit{texto}.\\
+\subsubsection{Generar la anotación}
+Una vez se tiene el conjunto de diccionarios con las etiquetas que ha encontrado el modelo, se copia el texto original al directorio de destino y se genera la anotación en formato brat, para ello se usa un diccionario por linea para generar el formato mencionado en \ref{brat} incrementando el número del token de la forma correspondiente, el fichero de la anotación tiene el mismo nombre que el fichero original pero con extensión ann.
+\subsection{Postprocess}
+Prerequisitos: Un directorio con textos con extensión txt y sus anotaciones con el mismo nombre y extensión ann.\\
+Salida: Anotaciones sobreescritas incorporando etiquetas detectadas por las expresiones regulares.
+Una vez se tiene una salida de un modelo, se realiza un análisis adicional para incorporar etiquetas con estructuras bien definidas que pueden abarcarse en expresiones regulares.
+\subsubsection{Búsqueda de expresiones}
+En primer lugar se lee el texto como en los apartados anteriores sustituyendo los saltos de linea por espacios.\\
+Se usa un diccionario con una clave para cada posible etiqueta y valor una lista de expresiones regulares asociadas a esa etiqueta.\\
+El diccionario es el siguiente:\\
+\begin{lstlisting}
+{
+    "EDAD_SUJETO_ASISTENCIA": [r'[\s]+(\d{2}\s+(años|año|dias|dia|meses|mes))'],
+    "SEXO_SUJETO_ASISTENCIA": [r'[\s]+([[H|h]ombre|[M|m]ujer|M|m|H|h])[\s|\.]'],
+    "FECHAS": [r'(\d{1,2}/\d{1,2}/\d{2,4})', 
+                r'((([L|l]unes|[M|m]artes|[M|m]iercoles|[J|j]ueves|
+                [V|v]iernes|[S|s]abado|[D|d]omingo)\s+)?(\d{1,2}\s*(de)?\s+)?
+                ([E|e]nero|[F|f]ebrero|[M|m]arzo|[A|a]bril|[M|m]ayo|
+                [J|j]unio|[J|j]ulio|[A|a]gosto|[S|s]eptiembre|[O|o]ctubre|
+                [N|n]oviembre|[D|d]iciembre)\s+(de|del)?\s*\d{2,4})' ],
+    "TERRITORIO": [r'\s(\d{5})\s'],
+    "PAIS": [r'(España)'],
+    "NUMERO_TELÉFONO": [r'[ ]+((\+34|0034|34)?[ ]*(6|7)[ ]*([0-9]){2}[ ]*([0-9]){3}[ ]*([0-9]){3})[\s|\.]+',
+                       r'[ ]+((\+34|0034|34)?[ ]*(6|7)[ ]*([0-9]){1}[ ]*([0-9]){3}[ ]*([0-9]){2}[ ]*([0-9]){2})[\s|\.]+'],
+    "NUMERO_FAX": [r'FAX:\s*((\d|\ |-)+)\s?',r'Fax:\s*((\d|\ |-)+)\s?'],
+    "CORREO_ELECTRONICO": [r'([a-zA-Z0-9_+-\.]+@[a-zA-Z0-9-]+\.
+    [a-zA-Z0-9-\.]+[a-zA-Z0-9-]+)\.?'],
+    "URL_WEB": [r'(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)']
+}
+\end{lstlisting}
+Las expresiones están formuladas de manera que eligiendo el primer grupo de la expresión se queda con el texto correspondiente a la etiqueta, de manera que para cada texto se extraen una lista de diccionarios que tienen como claves \textit{tag}, \textit{match}, \textit{ini} y \textit{fin} con todas las partes que encajen en una expresión, eligiendo el primer grupo como \textit{match}.
+\subsubsection{Combinación de entidades}
+Una vez se tiene esta lista de diccionarios para el texto se debe comprobar que no se duplican etiquetas de la anotación inicial, para ello se lee la anotación inicial y se generan dos conjuntos de etiquetas encontradas, cada elemento del conjunto corresponde a una etiqueta encontrada siendo representada por la cadena de texto \textit{entidad inicio final}.\\
+Se resta al conjunto de las expresiones regulares el conjunto de las anotaciones originales, de forma que no repita una anotación si ya existe.\\
+Finalmente se cuenta el número de etiquetas en la anotación original para continuar con la numeración y se escribe las etiquetas de las expresiones regulares al final del fichero ann.
+\subsection{Score}
+Prerequisito: Directorio con textos anotados para valorar y otro directorio con los mismos textos anotados como referencia válida en el directorio correspondiente.\\
+Salida: Informe sobre las métricas asociadas a la anotación.\\
+Para poder hacer uso de la herramienta proporcionada por MEDDOCAN se necesita un directorio de entrada con una estructura de directorios que contenga una carpeta llamada \textit{ref} para los datos de referencia y otra llamada \textit{res} con los datos que se quieren puntuar.\\
+En la carpeta de referencia se debe ubicar una carpeta llamada brat que contenga los textos con la anotación válida.\\
+ En la carpeta de datos para puntuar se deben encontrar dos carpetas llamadas \textit{subtask1} y \textit{subtask2}, correspondientes a las subtareas 1 y 2, que contendrán los mismos textos anotados por el modelo con o sin postprocesado.\\
+ Una vez la estructura de directorios es correcta se deje ejecutar el script de la herramienta con el comando \textit{python evaluate.py input\_folder output\_folder}, en el directorio de salida se dejará un fichero de texto llamado \textit{scores.txt} con una métrica por línea. 
+ Para realizar esta tarea de forma automática para todos los modelos se copiará la anotación correspondiente al modelo a las carpetas correspondientes en le estructura de directorios, se ejecutará el script y se cambia el nombre de la salida para que no lo sobreescriba.
+ Una vez se tienen todos los ficheros de los diferentes modelos se leen todos los ficheros de puntuación formando un diccionario por fichero con clave el nombre de la métrica y valor su puntuación. Haciendo uso de la librería \textit{pandas} se puede generar una tabla de puntuaciones por modelo.
+
+
+\section{Herramienta de anotación}
+Se puede generalizar parte del proceso de esta tarea para dar un mecanismo simple para entrenar y dar anotaciones en problemas similares de búsqueda de entidades en texto.\\
+De los puntos \ref{train} y \ref{pred} se crea un módulo python \textit{spacy\_ner.py} para la lectura de textos anotados, el entrenamiento del modelo y la generación de anotaciones a partir del mismo de la misma forma que se realiza en el sistema planteado.\\
+Este módulo ha sido empaquetado en una imagen de docker que parte de la imagen de miniconda junto con un script \textit{main.py} que gestiona los parámetros de la llamada y realiza la acción correspondiente.\\
+En el siguiente esquema se puede ver de forma general la estructura de la herramienta.\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{img/docker.png}\\
+\caption{Esquema de la herramienta de anotación}
+\end{figure}
+Como se puede observar al iniciar el contenedor se llama directamente al módulo \textit{main.py}, este toma los parámetros de entrada, el primer parámetro debe ser \emph{-t} o \emph{-p} que indica si se debe hacer un entrenamiento o una predicción respectivamente, según el modo elegido los parámetros son:
+\begin{itemize}
+\item Entremaniento:
+\begin{itemize}
+\item -in [path]: Ruta del directorio donde se encuentran los textos.
+\item -out [path] : Ruta del directorio donde se desea escribir el modelo.
+\item -i [n\_iteraciones] : Cantidad de iteraciones que se van a realizar durante el entrenamiento.
+\item -d [drop] : Coeficiente de drop para el entrenamiento del modelo.
+\end{itemize}
+\item Predicción:
+\begin{itemize}
+\item -m [path]: Ruta del directorio donde se encuentra el modelo que realiza las predicciones.
+\item -in [path]: Ruta donde se encuentran los ficheros para anotar.
+\item -out [path]: Ruta donde se desea escribir las anotaciones del modelo.
+\end{itemize}
+\end{itemize}
+
+Para que el contenedor pueda leer y escribir en las rutas especificadas en necesario que se cree un volumen con los directorios donde se desea usar.\\
+Un ejemplo de llamada sería:\\
+
+\begin{lstlisting}
+docker run -v ./local_path:/container_path docker_image -p -m /container_path/models -in /container_path/in -out /container_path/out
+\end{lstlisting}
+
+
+\cleardoublepage % empezamos en página impar
+\chapter{Resultados}
+En primer lugar se entrenó el modelo de Spacy usando los datos de entrenamiento, de todos los parámetros probados se recopilaron las puntuaciones proporcionadas por la herramienta de MEDDOCAN.\\
+Las puntuaciones para la subtarea 1 son Leak, Precision, Recall y F1. La subtarea 2 tiene dos formas de puntuar, en la estricta tiene que coincidir la posición exacta de la entidad, mientras que en la forma combinada se da por valida si existen varias entidades que al combinarlas dan lugar a una válida. En este caso se presta mayor atención a la versión estricta y las métricas son Precision, Recall y F1. Siempre se toma como valor principal el F1.
+\section{Validación}
+En primer lugar se analizó la puntuación de los modelos en el conjunto de validación, el resultado de la primera tarea se puede ver en la tabla \ref{tab:tabla-dev} donde se muestran los 15 con mejor puntuación F1, de la misma forma en la tabla \ref{tab:tabla-dev-2} se muestran los resultados de la segunda tarea según en criterio estricto.\\
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Leak}} & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \multicolumn{1}{c|}{\textbf{F1}} \\ \hline
+iteraciones=30\_drop=0.2              & 0,10247                            & 0,9248                                  & 0,86278                              & 0,89271                          \\ \hline
+iteraciones=40\_drop=0.5              & 0,10453                            & 0,92475                                 & 0,86002                              & 0,89121                          \\ \hline
+iteraciones=35\_drop=0.35             & 0,10556                            & 0,92446                                 & 0,85865                              & 0,89034                          \\ \hline
+iteraciones=35\_drop=0.25             & 0,10299                            & 0,91981                                 & 0,86209                              & 0,89002                          \\ \hline
+iteraciones=30\_drop=0.1              & 0,10608                            & 0,92441                                 & 0,85796                              & 0,88994                          \\ \hline
+iteraciones=35\_drop=0.1              & 0,10839                            & 0,92588                                 & 0,85485                              & 0,88895                          \\ \hline
+iteraciones=30\_drop=0.3              & 0,10839                            & 0,92329                                 & 0,85485                              & 0,88776                          \\ \hline
+iteraciones=25\_drop=0.2              & 0,10672                            & 0,92006                                 & 0,85709                              & 0,88746                          \\ \hline
+iteraciones=15\_drop=0.3              & 0,11341                            & 0,92865                                 & 0,84813                              & 0,88657                          \\ \hline
+iteraciones=20\_drop=0.4              & 0,10865                            & 0,92069                                 & 0,85451                              & 0,88637                          \\ \hline
+iteraciones=20\_drop=0.15             & 0,10415                            & 0,91378                                 & 0,86054                              & 0,88636                          \\ \hline
+iteraciones=20\_drop=0.1              & 0,10518                            & 0,91416                                 & 0,85916                              & 0,88581                          \\ \hline
+iteraciones=40\_drop=0.4              & 0,10505                            & 0,91334                                 & 0,85933                              & 0,88551                          \\ \hline
+iteraciones=35\_drop=0.15             & 0,10788                            & 0,91433                                 & 0,85554                              & 0,88396                          \\ \hline
+iteraciones=15\_drop=0.2              & 0,10839                            & 0,91292                                 & 0,85485                              & 0,88293                          \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-dev}Subtarea 1:Validación sin postproceso}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \multicolumn{1}{c|}{\textbf{F1}} \\ \hline
+iteraciones=30\_drop=0.2              & 0,93145                                 & 0,86899                              & 0,89913                          \\ \hline
+iteraciones=40\_drop=0.5              & 0,93253                                 & 0,86726                              & 0,89871                          \\ \hline
+iteraciones=35\_drop=0.1              & 0,93484                                 & 0,86313                              & 0,89755                          \\ \hline
+iteraciones=35\_drop=0.35             & 0,93096                                 & 0,86468                              & 0,89659                          \\ \hline
+iteraciones=35\_drop=0.25             & 0,92569                                 & 0,86761                              & 0,89571                          \\ \hline
+iteraciones=30\_drop=0.3              & 0,93148                                 & 0,86244                              & 0,89563                          \\ \hline
+iteraciones=20\_drop=0.15             & 0,92294                                 & 0,86916                              & 0,89524                          \\ \hline
+iteraciones=30\_drop=0.1              & 0,92979                                 & 0,86295                              & 0,89513                          \\ \hline
+iteraciones=20\_drop=0.4              & 0,92793                                 & 0,86123                              & 0,89334                          \\ \hline
+iteraciones=20\_drop=0.1              & 0,92186                                 & 0,8664                               & 0,89327                          \\ \hline
+iteraciones=25\_drop=0.2              & 0,92524                                 & 0,86192                              & 0,89246                          \\ \hline
+iteraciones=15\_drop=0.3              & 0,9345                                  & 0,85347                              & 0,89215                          \\ \hline
+iteraciones=40\_drop=0.4              & 0,91883                                 & 0,86451                              & 0,89084                          \\ \hline
+iteraciones=35\_drop=0.15             & 0,92133                                 & 0,86209                              & 0,89073                          \\ \hline
+iteraciones=15\_drop=0.2              & 0,919                                   & 0,86054                              & 0,88881                          \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-dev-2}Subtarea 2 Strict:Validación sin postproceso}
+\end{table}
+Dado que el mejor modelo no se encuentra en el límite de los parámetros probados, parece que el conjunto de valores posibles es válido y se elige como modelo de referencia actual al que tiene 30 iteraciones con valor de drop 0.2.\\
+Tras este análisis se procede a comprobar las etiquetas que no reconoce el modelo de referencia en busca de posibles patrones en los errores, dando lugar a la tabla \ref{tab:tabla-miss}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Etiqueta}} & \multicolumn{1}{c|}{\textbf{Fallos}} \\ \hline
+SEXO\_SUJETO\_ASISTENCIA                & 234                                  \\ \hline
+CALLE                                   & 175                                  \\ \hline
+FECHAS                                  & 60                                   \\ \hline
+TERRITORIO                              & 55                                   \\ \hline
+ID\_SUJETO\_ASISTENCIA                  & 35                                   \\ \hline
+FAMILIARES\_SUJETO\_ASISTENCIA          & 35                                   \\ \hline
+EDAD\_SUJETO\_ASISTENCIA                & 34                                   \\ \hline
+INSTITUCION                             & 32                                   \\ \hline
+HOSPITAL                                & 18                                   \\ \hline
+NOMBRE\_PERSONAL\_SANITARIO             & 18                                   \\ \hline
+ID\_ASEGURAMIENTO                       & 15                                   \\ \hline
+ID\_TITULACION\_PERSONAL\_SANITARIO     & 10                                   \\ \hline
+PAIS                                    & 7                                    \\ \hline
+CORREO\_ELECTRONICO                     & 6                                    \\ \hline
+NUMERO\_TELEFONO                        & 6                                    \\ \hline
+OTROS\_SUJETO\_ASISTENCIA               & 5                                    \\ \hline
+ID\_CONTACTO\_ASISTENCIAL               & 4                                    \\ \hline
+NOMBRE\_SUJETO\_ASISTENCIA              & 4                                    \\ \hline
+PROFESION                               & 4                                    \\ \hline
+NUMERO\_FAX                             & 3                                    \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-miss}Etiquetas no encontradas sin postproceso}
+\end{table}
+
+Con esta información se realiza un estudio de las posibles expresiones regulares para mejorar el sistema, obteniendo tras ello los resultados de las tablas \ref{tab:tabla-dev-pos} y \ref{tab:tabla-dev-2-pos} correspondientes a la subtarea 1 y 2 respectivamente una vez se ha realizado el postproceso.
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Leak}} & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \multicolumn{1}{c|}{\textbf{F1}} \\ \hline
+iteraciones=30\_drop=0.2              & 0,07261                            & 0,92477                                 & 0,90278                              & 0,91364                          \\ \hline
+iteraciones=40\_drop=0.5              & 0,07428                            & 0,92477                                 & 0,90053                              & 0,91249                          \\ \hline
+iteraciones=35\_drop=0.35             & 0,07544                            & 0,92448                                 & 0,89898                              & 0,91155                          \\ \hline
+iteraciones=30\_drop=0.1              & 0,07595                            & 0,92443                                 & 0,89829                              & 0,91117                          \\ \hline
+iteraciones=35\_drop=0.25             & 0,07299                            & 0,92002                                 & 0,90226                              & 0,91105                          \\ \hline
+iteraciones=35\_drop=0.1              & 0,07853                            & 0,92581                                 & 0,89485                              & 0,91006                          \\ \hline
+iteraciones=30\_drop=0.3              & 0,07827                            & 0,92336                                 & 0,89519                              & 0,90906                          \\ \hline
+iteraciones=25\_drop=0.2              & 0,0766                             & 0,92028                                 & 0,89743                              & 0,90871                          \\ \hline
+iteraciones=15\_drop=0.3              & 0,08329                            & 0,92848                                 & 0,88847                              & 0,90803                          \\ \hline
+iteraciones=20\_drop=0.4              & 0,07853                            & 0,92088                                 & 0,89485                              & 0,90768                          \\ \hline
+iteraciones=20\_drop=0.15             & 0,07428                            & 0,91425                                 & 0,90053                              & 0,90734                          \\ \hline
+iteraciones=20\_drop=0.1              & 0,07505                            & 0,91464                                 & 0,8995                               & 0,90701                          \\ \hline
+iteraciones=40\_drop=0.4              & 0,07492                            & 0,91385                                 & 0,89967                              & 0,90671                          \\ \hline
+iteraciones=35\_drop=0.15             & 0,07775                            & 0,9148                                  & 0,89588                              & 0,90524                          \\ \hline
+iteraciones=15\_drop=0.2              & 0,0784                             & 0,9136                                  & 0,89502                              & 0,90421                          \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-dev-pos}Subtarea 1:Validación con postproceso}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \multicolumn{1}{c|}{\textbf{F1}} \\ \hline
+iteraciones=30\_drop=0.2              & 0,9318                                  & 0,90915                              & 0,92034                          \\ \hline
+iteraciones=40\_drop=0.5              & 0,93271                                 & 0,90795                              & 0,92016                          \\ \hline
+iteraciones=35\_drop=0.1              & 0,93487                                 & 0,90312                              & 0,91872                          \\ \hline
+iteraciones=35\_drop=0.35             & 0,93136                                 & 0,90519                              & 0,91809                          \\ \hline
+iteraciones=30\_drop=0.3              & 0,9317                                  & 0,90295                              & 0,9171                           \\ \hline
+iteraciones=35\_drop=0.25             & 0,92615                                 & 0,90795                              & 0,91696                          \\ \hline
+iteraciones=30\_drop=0.1              & 0,93008                                 & 0,90346                              & 0,91658                          \\ \hline
+iteraciones=20\_drop=0.15             & 0,92364                                 & 0,90915                              & 0,91634                          \\ \hline
+iteraciones=20\_drop=0.4              & 0,92846                                 & 0,90157                              & 0,91482                          \\ \hline
+iteraciones=20\_drop=0.1              & 0,9225                                  & 0,90691                              & 0,91464                          \\ \hline
+iteraciones=25\_drop=0.2              & 0,92589                                 & 0,90243                              & 0,91401                          \\ \hline
+iteraciones=15\_drop=0.3              & 0,93458                                 & 0,89398                              & 0,91383                          \\ \hline
+iteraciones=35\_drop=0.15             & 0,92216                                 & 0,9026                               & 0,91227                          \\ \hline
+iteraciones=40\_drop=0.4              & 0,91959                                 & 0,90484                              & 0,91216                          \\ \hline
+iteraciones=15\_drop=0.2              & 0,92007                                 & 0,90088                              & 0,91037                          \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-dev-2-pos}Subtarea 2 Strict:Validación con postproceso}
+\end{table}
+
+Como se puede observar la puntuación mejora notablemente, quedando finalmente el mismo modelo de referencia con valor F1 de $0,91364$ en la subtarea 1 y $0,92034$ en la subtarea 2 para el conjunto de validación.\\
+De la misma forma que antes se analizan las etiquetas no encontradas para el modelo de referencia, en la tabla \ref{tab:tabla-miss-pos} se puede observar que la mayoría de las etiquetas de la clase SEXO\_SUJETO\_ASISTENCIA han sido corregidas gracias a las expresiones regulares.
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Etiqueta}} & \multicolumn{1}{c|}{\textbf{Fallos}} \\ \hline
+CALLE                                   & 175                                  \\ \hline
+TERRITORIO                              & 55                                   \\ \hline
+FECHAS                                  & 52                                   \\ \hline
+FAMILIARES\_SUJETO\_ASISTENCIA          & 35                                   \\ \hline
+ID\_SUJETO\_ASISTENCIA                  & 35                                   \\ \hline
+EDAD\_SUJETO\_ASISTENCIA                & 34                                   \\ \hline
+INSTITUCION                             & 32                                   \\ \hline
+HOSPITAL                                & 18                                   \\ \hline
+NOMBRE\_PERSONAL\_SANITARIO             & 18                                   \\ \hline
+ID\_ASEGURAMIENTO                       & 15                                   \\ \hline
+SEXO\_SUJETO\_ASISTENCIA                & 12                                   \\ \hline
+ID\_TITULACION\_PERSONAL\_SANITARIO     & 10                                   \\ \hline
+PAIS                                    & 7                                    \\ \hline
+OTROS\_SUJETO\_ASISTENCIA               & 5                                    \\ \hline
+NUMERO\_TELEFONO                        & 5                                    \\ \hline
+ID\_CONTACTO\_ASISTENCIAL               & 4                                    \\ \hline
+CORREO\_ELECTRONICO                     & 4                                    \\ \hline
+PROFESION                               & 4                                    \\ \hline
+NOMBRE\_SUJETO\_ASISTENCIA              & 4                                    \\ \hline
+NUMERO\_FAX                             & 3                                    \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-miss-pos}Etiquetas no encontradas con postproceso}
+\end{table}
+
+\section{Test}
+Una vez se ha obtenido un resultado satisfactorio en el conjunto de validación, se mantiene el modelo de referencia, para contrastar que sea el que mejor generaliza los resultados se muestran a continuación las puntuaciones sobre el conjunto de test, tras ello no se realizarán más iteraciones ni se tendrán en cuenta estos datos para la mejora del modelo. En las tablas \ref{tab:tabla-test-pos} y \ref{tab:tabla-test-2-pos} se muestran los resultados de los mejores modelos para las subtareas 1 y 2 con postproceso.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Leak}} & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \multicolumn{1}{c|}{\textbf{F1}} \\ \hline
+iteraciones=30\_drop=0.2              & 0,06471                            & 0,92327                                 & 0,91397                              & 0,9186                           \\ \hline
+iteraciones=40\_drop=0.5              & 0,06923                            & 0,92613                                 & 0,90797                              & 0,91696                          \\ \hline
+iteraciones=30\_drop=0.3              & 0,07149                            & 0,92909                                 & 0,90496                              & 0,91687                          \\ \hline
+iteraciones=20\_drop=0.4              & 0,07082                            & 0,92747                                 & 0,90585                              & 0,91653                          \\ \hline
+iteraciones=15\_drop=0.3              & 0,0772                             & 0,9352                                  & 0,89737                              & 0,91589                          \\ \hline
+iteraciones=35\_drop=0.1              & 0,07242                            & 0,92648                                 & 0,90373                              & 0,91496                          \\ \hline
+iteraciones=30\_drop=0.1              & 0,07002                            & 0,92305                                 & 0,90691                              & 0,91491                          \\ \hline
+iteraciones=35\_drop=0.35             & 0,06989                            & 0,92141                                 & 0,90708                              & 0,91419                          \\ \hline
+iteraciones=25\_drop=0.2              & 0,07242                            & 0,9248                                  & 0,90373                              & 0,91414                          \\ \hline
+iteraciones=35\_drop=0.2              & 0,0659                             & 0,91529                                 & 0,91238                              & 0,91384                          \\ \hline
+iteraciones=35\_drop=0.25             & 0,07016                            & 0,9194                                  & 0,90673                              & 0,91302                          \\ \hline
+iteraciones=20\_drop=0.15             & 0,06883                            & 0,91725                                 & 0,9085                               & 0,91285                          \\ \hline
+iteraciones=20\_drop=0.1              & 0,06923                            & 0,91329                                 & 0,90797                              & 0,91062                          \\ \hline
+iteraciones=40\_drop=0.4              & 0,06989                            & 0,91338                                 & 0,90708                              & 0,91022                          \\ \hline
+iteraciones=35\_drop=0.15             & 0,07109                            & 0,91487                                 & 0,90549                              & 0,91016                          \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-test-pos}Subtarea 1:Test con postproceso}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{\textbf{Modelo}} & \multicolumn{1}{c|}{\textbf{Precision}} & \multicolumn{1}{c|}{\textbf{Recall}} & \multicolumn{1}{c|}{\textbf{F1}} \\ \hline
+iteraciones=30\_drop=0.2              & 0,93195                                 & 0,92175                              & 0,92682                          \\ \hline
+iteraciones=40\_drop=0.5              & 0,93491                                 & 0,91592                              & 0,92531                          \\ \hline
+iteraciones=20\_drop=0.4              & 0,93573                                 & 0,91309                              & 0,92427                          \\ \hline
+iteraciones=30\_drop=0.3              & 0,9363                                  & 0,91132                              & 0,92364                          \\ \hline
+iteraciones=35\_drop=0.1              & 0,9342                                  & 0,91044                              & 0,92217                          \\ \hline
+iteraciones=35\_drop=0.35             & 0,92978                                 & 0,9145                               & 0,92208                          \\ \hline
+iteraciones=30\_drop=0.1              & 0,93037                                 & 0,91344                              & 0,92183                          \\ \hline
+iteraciones=15\_drop=0.3              & 0,94106                                 & 0,90249                              & 0,92137                          \\ \hline
+iteraciones=35\_drop=0.2              & 0,92249                                 & 0,91874                              & 0,92061                          \\ \hline
+iteraciones=20\_drop=0.15             & 0,92521                                 & 0,91556                              & 0,92036                          \\ \hline
+iteraciones=35\_drop=0.25             & 0,92632                                 & 0,91274                              & 0,91948                          \\ \hline
+iteraciones=25\_drop=0.2              & 0,93052                                 & 0,9085                               & 0,91938                          \\ \hline
+iteraciones=35\_drop=0.15             & 0,92301                                 & 0,91274                              & 0,91784                          \\ \hline
+iteraciones=20\_drop=0.1              & 0,92051                                 & 0,91433                              & 0,91741                          \\ \hline
+iteraciones=40\_drop=0.4              & 0,92043                                 & 0,91344                              & 0,91693                          \\ \hline
+\end{tabular}
+\caption{\label{tab:tabla-test-2-pos}Subtarea 2 Strict:Test con postproceso}
+\end{table}
+El modelo de referencia queda con la mejor puntuación en ambas tareas obteniendo un resultado de $0,9186$ y $0,92682$ para la subtarea 1 y 2 respectivamente, por tanto se selecciona como modelo definitivo.
+
+
+\cleardoublepage % empezamos en página impar
+\chapter{Conclusiones}
+En este estudio se puede observar que un modelo preentrenado puede dar buenos resultados al adaptarlo al contexto usando datos de ejemplo, esta estrategia bastante útil dado que entrenar un modelo desde el comienzo puede llevar a sobre ajuste de los datos de entrenamiento más fácilmente además de que el modelo base ya da algunos resultados positivos desde el comienzo.\\
+Parece que los resultados de esta tarea son realmente buenos en general, el conjunto de datos puede que sea demasiado homogéneo o sintético de forma que en un escenario más realista los resultados podrían empeorar.\\
+Dado que existen etiquetas que no se encuentran anotadas en los datos proporcionados y que tampoco se pueden abarcar por expresiones regulares, el sistema nunca será capaz de detectarlas ni conoce de la existencia de esas etiquetas.
+\section{Posibles mejoras}
+En el sistema propuesto se han detectado carencias o puntos de mejora, algunas ideas de trabajo futuro son:
+\begin{itemize}
+\item Mejora de las expresiones regulares.
+\item Prueba de otros modelos y sistemas para mejorar al actual.
+\item Combinar distintos modelos para tomar decisiones sobre las etiquetas.
+\item Realizar una posible API para la herramienta que permita llamadas para un modelo con un texto y devuelva las etiquetas.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APÉNDICE(S) %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% BIBLIOGRAFIA %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cleardoublepage
+
+% Las siguientes dos instrucciones es todo lo que necesitas
+% para incluir las citas en la memoria
+\nocite{*}
+\bibliographystyle{abbrv}
+\bibliography{memoria_pln} % memoria.bib es el nombre del fichero que contiene
+% las referencias bibliográficas. Abre ese fichero y mira el formato que tiene,
+% que se conoce como BibTeX. Hay muchos sitios que exportan referencias en
+% formato BibTeX. Prueba a buscar en http://scholar.google.com por referencias
+% y verás que lo puedes hacer de manera sencilla.
+% Más información: 
+% http://texblog.org/2014/04/22/using-google-scholar-to-download-bibtex-citations/
+
+\cleardoublepage
+
+
+
+\end{document}

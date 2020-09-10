@@ -27,7 +27,7 @@ Existen dos formas de ejecutar esta herramienta, o bien se dispone de las depend
 Para ejecutar localmente la herramienta es necesario disponer de las dependencias del fichero *requirements.txt*, esto se puede hacer disponiendo de python 3 y ejecutando `pip install -r requirements.txt`, no obstante es una mejor práctica hacer uso de [entornos de conda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html).
 Para ejecutar el modo entrenamiento se debe ejecutar `python main.py -t [PARAMETROS OPCIONALES]` mientras que para ejecutar el modo de predicción sería `python main.py -p [PARAMETROS OPCIONALES]` .
 ## Ejecución con docker
-Para ejecutar la herramienta dentro de un contenedor es necesario tener instalado [docker](https://docs.docker.com/get-docker/).
+Para ejecutar la herramienta en linux dentro de un contenedor es necesario tener instalado [docker](https://docs.docker.com/get-docker/).
 Se debe construir la imagen de la herramienta ejecutando en el directorio del repositorio `docker build . -t <NOMBRE DE LA IMAGEN>`.
 Para ejecutar la herramienta se deben crear los volúmenes necesarios para leer y escribir en los directorios de entrada y salida, por tanto la herramienta se ejecuta de la siguiente forma:
  - Entrenamiento: `docker run -v <DIRECTORIO DATOS LOCAL>:<DIRECTORIO DATOS CONTENEDOR> -u $(id -u $USER) <NOMBRE DE LA IMAGEN> -t [PARAMETROS OPCIONALES]`
