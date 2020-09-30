@@ -20,6 +20,7 @@
 
 \documentclass[a4paper, 12pt]{book}
 %\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
 
 \usepackage[a4paper, left=2.5cm, right=2.5cm, top=3cm, bottom=3cm]{geometry}
 \usepackage{times}
@@ -38,6 +39,7 @@
 \usepackage{mathtools}
 \usepackage{listings}
 \usepackage{url}
+
 
 %definir bloques de codigo
 \usepackage{color}
@@ -70,6 +72,7 @@
 \renewcommand{\baselinestretch}{1.5}  %% Interlineado
 
 \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
 
 \begin{document}
 
@@ -137,7 +140,8 @@ Tutora: Soto Montalvo Herranz
       \Large\textbf{Resumen}\\
    \end{center}
       
-Este trabajo se ha centrado en resolver la tarea MEDDOCAN, esta consiste en identificar entidades nombradas de informes clínicos en castellano. El sistema planteado hace uso de un modelo preentrenado que se adapta al contexto entrenando con los datos de la tarea. Tras diversas iteraciones analizando los resultados del sistema, se incluye un postproceso sobre los resultados para mejorarlos.\\
+En medicina es difícil realizar investigación con informes médicos dado que existe mucha información sensible que no puede cederse sin pasar por un proceso previo que la anonimice, esto crea una barrera que impide el tratamiento automático de informes médicos.
+Este trabajo se ha centrado en resolver la tarea MEDDOCAN, esta consiste en identificar entidades nombradas que requieren ser anonimizadas en informes clínicos en castellano. El sistema planteado hace uso de un modelo preentrenado que se adapta al contexto entrenando con los datos de la tarea. Tras diversas iteraciones analizando los resultados del sistema, se incluye un postproceso sobre los resultados para mejorarlos.\\
 
 Finalmente, se generaliza el proceso usado en esta tarea creando una herramienta que permite el reconocimiento de entidades nombradas a partir de textos anotados en castellano.
    \vspace*{\stretch{2.0}}
@@ -156,11 +160,11 @@ Finalmente, se generaliza el proceso usado en esta tarea creando una herramienta
 \tableofcontents 
 %%%% Índice de figuras
 %\cleardoublepage
-\addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
+\addcontentsline{toc}{chapter}{Índice de figuras} % para que aparezca en el indice de contenidos
 \listoffigures % indice de figuras
 %%%% Índice de tablas
 %\cleardoublepage
-\addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
+\addcontentsline{toc}{chapter}{Índice de tablas} % para que aparezca en el indice de contenidos
 \listoftables % indice de tablas
 
 
@@ -175,7 +179,7 @@ En las últimas décadas se puede apreciar una tendencia creciente del uso de la I
 
 En el ámbito de la salud no ha sido menos relevante dando lugar a concursos y proyectos para la creación de herramientas y algoritmos que permitan hacer uso de la información recopilada para dar valor a esos datos.\\
 
-En 2006 y 2014 la organización i2b2 propone dos tareas para poder anonimizar de forma efectiva informes clínicos en inglés, posteriormente, en 2019 la iniciativa IberLEF 2019 lanza el reto de realizar esta tarea para textos clínicos en español bajo el nombre de MEDDOCAN (Medical Document Anonymization). En esta tarea se han involucrado algunas organizaciones como el Gobierno de España a partir de su Plan de Impulso de Tecnologías del Lenguaje \cite{PlanTL}, el Centro Nacional de Investigaciones Oncológicas (CNIO)\cite{CNIO} o el Centro Nacional de Supercomputación de Barcelona\cite{CSB}.\\
+En 2006 y 2014 la organización i2b2 propone dos tareas \cite{i2b2} para poder anonimizar de forma efectiva informes clínicos en inglés, posteriormente, en 2019 la iniciativa IberLEF 2019 lanza el reto de realizar esta tarea para textos clínicos en español bajo el nombre de MEDDOCAN (Medical Document Anonymization) \cite{MEDDOCAN}. En esta tarea se han involucrado algunas organizaciones como el Gobierno de España a partir de su Plan de Impulso de Tecnologías del Lenguaje \cite{PlanTL}, el Centro Nacional de Investigaciones Oncológicas (CNIO) \cite{CNIO} o el Centro Nacional de Supercomputación de Barcelona \cite{CSB}.\\
 
 La motivación principal de esta tarea consiste en cumplir con la ley de protección de datos, dado que en la actualidad la información médica no puede ser compartida sin ser anonimizada apropiadamente, esto impide poder realizar muchas investigaciones en el campo del PLN en medicina debido a la falta de corpus disponible y a las implicaciones de trabajar con datos protegidos en caso de no anonimizar. La resolución exitosa de esta tarea permitirá automatizar la anonimización de textos para crear nuevos corpus y abrir paso a futuros proyectos que trabajen con estos datos.
 
@@ -187,14 +191,16 @@ La finalidad de este proyecto es identificar los elementos necesarios para una a
 \item Sub-track2: detección de datos sensibles a partir de su localización (sin tener en cuenta la categoría).
 \end{itemize}
 
-Como se puede ver en el ejemplo de la web de la tarea \cite{Example}, si la anotación correcta de un documento es la mostrada en \ref{fig:gold}
+En la Figura \ref{fig:gold} se muestra un ejemplo de anotación de documento para la tarea MEDDOCAN
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.60]{img/meddocan-tags-1024x146.png}\\
-\caption{Anotación de referencia}
+\caption{Ejemplo de anotación de referencia de un documento.}
 \label{fig:gold}
 \end{figure}
-El ejemplo de posible anotación para la subtarea 1 sería el de la figura \ref{fig:s1} donde se puede ver todas las etiquetas que indica son correctas tanto en localización como en tipo de entidad, no obstante no ha encontrado todas las entidades del documento, por tanto obtiene un 1 de precisión y un 0.5714 de recall, como puede verse en \ref{fig:s1-p}
+
+Un ejemplo de anotación de salida de un sistema sería el mostrado en la Figura \ref{fig:s1}, y sería correspondiente a la salida de la subtarea 1. Si se compara esta salida con la anotación de la Figura \ref{fig:gold}, que sería la anotación de referencia, se puede ver cómo todo lo que ha detectado está bien, tanto por el tipo de entidad identificado como por sus posiciones. Sin embargo, no ha encontrado todas las posibles entidades que podría haber identificado.
+
 
 \begin{figure}[H]
 \centering
@@ -203,26 +209,19 @@ El ejemplo de posible anotación para la subtarea 1 sería el de la figura \ref{fi
 \label{fig:s1}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale=0.65]{img/meddocan-ex2.png}\\
-\caption{Puntuación de ejemplo subtarea 1}
-\label{fig:s1-p}
-\end{figure}
-
-Para la subtarea 2 el ejemplo propuesto es el de la figura \ref{fig:s2} donde se tiene una puntuación perfecta debido a que ha encontrado todas las etiquetas con su localización correcta, no se tienen en cuenta el tipo de entidad por lo que podría indicarse cualquiera sin alterar la puntuación.
+Para la subtarea 2 el ejemplo propuesto es el de la Figura \ref{fig:s2}, donde se tiene una puntuación perfecta debido a que ha encontrado todas las etiquetas con su localización correcta, no se tiene en cuenta el tipo de entidad por lo que podría indicarse cualquiera sin alterar la puntuación.
 
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.45]{img/meddocan-ex3-1.png}\\
-\caption{Anotación ejemplo subtarea 2}
+\caption{Anotación de ejemplo de la subtarea 2}
 \label{fig:s2}
 \end{figure}
 
 Para la evaluación de la calidad del algoritmo se usará la herramienta de evaluación de MEDDOCAN y se realizará un análisis de los resultados para posibles mejoras. Adicionalmente, como objetivo secundario, se desarrollará una herramienta que permita la detección de cualquier tipo de entidad que se quiera detectar a partir de ejemplos.
 
 \subsection{Entidades}
-Existen 29 tipos entidades diferentes que deben ser identificadas para la tarea, mostradas en la tabla \ref{tab:tags}. La forma de identificar y anotar correctamente estas entidades se encuentra en la guía de anotación proporcionada en la tarea\cite{Anotation_guide}
+Existen 29 tipos entidades diferentes que deben ser identificadas para la tarea, mostradas en la Tabla \ref{tab:tags}. La forma de identificar y anotar correctamente estas entidades se encuentra en la guía de anotación proporcionada en la tarea \cite{Anotation_guide}
 
 \begin{table}[H]
 \centering
@@ -259,12 +258,12 @@ SEXO\_SUJETO\_ASISTENCIA                \\ \hline
 TERRITORIO                              \\ \hline
 URL\_WEB                                \\ \hline
 \end{tabular}
-\caption{\label{tab:tags} Etiquetas}
+\caption{\label{tab:tags} Categorías posibles a anonimizar}
 \end{table}
 
 
 \section{Conceptos}
-A lo largo de esta memoria se hará mención a algunos conceptos fundamentales para entender el funcionamiento de algunas partes del sistema. Estos se presentan a continuación.
+A lo largo de esta memoria se hará mención a algunos conceptos fundamentales para entender el funcionamiento de algunas partes del sistema. A continuación se presentan estos conceptos. 
 \subsection{Formato brat para localizar etiquetas}\label{brat}
 Con el fin de tratar la información contenida en un texto es necesario definir un formato para transmitir esta información de forma estructurada, para este problema existen varios formatos estándar, en el caso de este sistema se usará el formato brat \cite{Brat}. A continuación se puede ver un ejemplo.\\
 
@@ -287,19 +286,32 @@ T4\tab Country 75 81\tab Sweden
  }%
 }\\
 
-En este caso se ha decidido anotar las organizaciones y los países. Solo se indica la posición (posición del primer carácter de la palabra en el texto original y posición del último carácter de la palabra) y etiquetas (tipo de palabra, en este caso del ejemplo son entidades nombradas de diferentes categorías), aunque existe más información posible con este formato, en este estudio se va a usar únicamente la información de entidades nombradas.\\
+En este caso se ha decidido anotar las organizaciones y los países. Solo se indica la posición (posición del primer carácter de la palabra en el texto original y posición del último carácter de la palabra) y etiquetas (tipo de palabra, en este caso del ejemplo son entidades nombradas de diferentes categorías), aunque existe más información posible con este formato en este estudio se va a usar únicamente la información de entidades nombradas.\\
 El formato define que cada línea contiene una etiqueta y en cada línea se tiene en este orden un número de token (T\#), una tabulación, la etiqueta correspondiente, un espacio, el inicio y final del texto correspondiente separado por espacio, una tabulación y el texto al que corresponde. La extensión que se debe indicar para este tipo de ficheros es \textbf{.ann} y es un fichero de texto.
 
+\subsection{Token}
+Para tratar documentos de texto es habitual empezar por dividirlo en elementos más simples llamados tokens, habitualmente palabras, caracteres o n-gramas (grupos de n caracteres o palabras).\\
+
+El proceso de dividir el texto en tokens se denomina tokenización y suele venir precedido por una limpieza del texto para evitar imperfecciones propias de los datos originales.\\
+
+Un ejemplo de tokenización sería:\\
+Texto: 'Me río en el baño'\\
+Tokens: ['Me', 'río', 'en', 'el', 'baño']
+
+Existen tokens que no proporcionan información sobre el texto, estos se denominan palabras vacías (o stop words) y suelen ser artículos, pronombres, preposiciones, etc.
+\subsection{Embedding}
+En el contexto del PLN se denomina embedding a una técnica de representación del lenguaje que permite transformar tokens en vectores numéricos, esto será útil para utilizar otras herramientas como redes neuronales que no sean capaces de tratar texto de forma directa.\\
+
+Existen multitud de embedings diferentes para representar el lenguaje y en muchos casos estos pueden ser entrenados para adaptarse a un contexto y representar el lenguaje de una manera más fiel a la realidad. 
 
 
 
 \section{Estructura del documento}
-Esta memoria se encuentra dividida en 7 capítulos:
+Esta memoria se encuentra dividida en 7 capítulos, el contenido de los 6 restantes se presenta a continuación::
 \begin{itemize}
-\item Capítulo 1: Contiene la introducción donde se presenta la motivación de la tarea así como la tarea y algunos conceptos fundamentales.
-\item Capítulo 2: Se muestra el estado del arte donde se expone los sistemas y métodos que han usado los mejores participantes para abarcar el problema
+\item Capítulo 2: Se muestra el estado del arte donde se expone los sistemas y métodos que han usado los mejores participantes de la tarea MEDDOCAN para abarcar el problema
 \item Capítulo 3: Descripción de las diferentes partes del sistema propuesto que se ha implementado.
-\item Capítulo 4: Metodologías de software empleadas en el proceso.
+\item Capítulo 4: Metodologías de software y tecnologías empleadas en el proceso.
 \item Capítulo 5: Descripción en detalle de la implementación de los diferentes módulos y algoritmos necesarios.
 \item Capítulo 6: Resultados obtenidos en las diferentes partes así como su análisis.
 \item Capítulo 7: Conclusiones y posibles puntos de mejora.
@@ -311,37 +323,86 @@ Esta memoria se encuentra dividida en 7 capítulos:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \cleardoublepage
-\chapter{Estado del arte}
-En este capítulo se recogen algunos conceptos teóricos del PLN en la actualidad, así como las herramientas usadas por algunos de los participantes con mejores resultados\cite{fadi}\cite{lukas}\cite{nperez}.
-\section{Herramientas de PLN}
-\subsection{Token}
-Para tratar documentos de texto es habitual empezar por dividirlo en elementos más simples llamados tokens, habitualmente palabras, caracteres o n-gramas(grupos de n caracteres o palabras).\\
-
-El proceso de dividir el texto en tokens se denomina tokenización y suele venir precedido por una limpieza del texto para evitar imperfecciones propias de los datos originales.\\
-
-Un ejemplo de tokenización sería:\\
-Texto: 'Me río en el baño'\\
-Tokens: ['Me', 'río', 'en', 'el', 'baño']
-
-Existen tokens que no proporcionan información sobre el texto, estos se denominan palabras vacías (o stop words) y suelen ser artículos, pronombres, preposiciones, etc.
-\subsection{Embedding}
-En el contexto del PLN se denomina embedding es una técnica de representación del lenguaje que permite transformar tokens en vectores numéricos de texto, esto será útil para utilizar otras herramientas como redes neuronales que no sean capaces de tratar texto de forma directa.\\
-
-Existen multitud de embedings diferentes para representar el lenguaje y en muchos casos estos pueden ser entrenados para adaptarse a un contexto y representar el lenguaje de una manera más fiel a la realidad. 
+\chapter{Mejores propuestas de la tarea MEDDOCAN}
+En este capítulo se recogen algunas de las propuestas de los participantes con mejores resultados en la tarea \cite{fadi}\cite{lukas}\cite{nperez}.
 
 \section{Red Neuronal Bi-LSTM con CRF}
-Una red neuronal Bi-LSTM (Long Short Term Memory) presenta una arquitectura que puede interpretarse como la combinación de dos redes neuronales recurrentes, donde una envía la salida de cada entrada hacia adelante y la otra hacia atrás.\\
+Este tipo de propuestas consta de dos elementos que se detallan a continuación, por un lado una red neuronal que recibe los tokens vectorizados a traves de un embedding y un modelo CRF que usa la salida de la red para detectar las etiquetas correspondientes.
+\subsection{Red Neuronal Recurrente}
+En este tipo de red neuronal la salida de la red se usa a su vez como entrada creando una dependencia temporal que avanza a medida que se entrena. Se puede ver de forma simplificada la estructura de un único nodo en la Figura \ref{fig:rnn-1}.
 
-La parte de CRF (Conditional Random Fields) es un modelo estocástico para reconocer patrones que se utiliza en este caso para asignar a cada token la etiqueta correspondiente en función de la salida de la red.\\
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{img/RNN-1.png}\\
+\caption{Red Neuronal Recurrente}
+\label{fig:rnn-1}
+\end{figure}
 
-Un ejemplo de cómo se estructura este sistema es el de la figura \ref{fig:bi-lstm}.
+Esta estructura se puede representar con un eje temporal que ayuda a interpretar las dependencias entre las diferentes entradas, un ejemplo de esta representación se encuentra en la Figura \ref{fig:rnn-2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=1.0]{img/RNN-2.png}\\
+\caption{Red Neuronal Recurrente Extendida}
+\label{fig:rnn-2}
+\end{figure}
+
+\subsection{Red Neuronal Bi-LSTM}
+Una red neuronal Bi-LSTM (Long Short Term Memory) presenta una arquitectura que puede interpretarse como la combinación de dos redes neuronales recurrentes independientes, donde una envía la salida de cada entrada hacia adelante y la otra hacia atrás.\\
+
+Las redes LSTM tienen una particularidad y es que, a diferencia de una red neuronal recurrente donde el peso del primer elemento se ve reducido en cada nuevo elemento, en este tipo de redes se incorpora un elemento de entrada adicional llamado estado, este elemento es actualizado en cada iteración dejando la información relevante aunque provenga de elementos muy lejanos.
+
+
+Esta arquitectura puede verse en la Figura \ref{fig:Bi-LSTM}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{img/LSTM.png}\\
+\caption{Red Neuronal Bi-LSTM}
+\label{fig:Bi-LSTM}
+\end{figure}
+
+\subsection{Campo Aleatorio Condicional}
+Un campo aleatorio condicional (o CRF por sus siglas en inglés) es un modelo estocástico para reconocer patrones que se utiliza en este caso para asignar a cada token la etiqueta correspondiente en función de la salida de la red.\\
+
+Este modelo usa el contexto del token (salida de los tokens vecinos) para predecir la etiqueta más probable a cada token, este problema se resuelve con el algoritmo de Viterbi. Hay que observar que este modelo asigna una etiqueta por token, por lo que luego hay que reconstruir la secuencia completa de tokens que corresponden a una entidad, para ello además del tipo de entidad también se indica la posición del token en la entidad siguiendo el esquema BIOES (Begin, Inside, Outside, End, Single).\\
+
+Existe la etiqueta vacía que se denota con la letra O e indica que no pertenece a ninguna entidad el token correspondiente.
+\subsection{Esquema del sistema}
+Uniendo los diferentes conceptos mostrados anteriormente podemos ver una estructura de este sistema en la Figura \ref{fig:bi-lstm-crf}.
 \begin{figure}[H]
 \centering
 \includegraphics[scale=1.0]{img/bi-lstm.png}\\
 \caption{Arquitectura Bi-LSTM con CRF}
-\label{fig:bi-lstm}
+\label{fig:bi-lstm-crf}
 \end{figure}
 
+\section{Blooming Embedding con Residual CNN}
+Esta aproximación será la usada en el sistema planteado ya que es la que utiliza la herramienta SpaCy. Consiste en usar un tipo de representación de tokens basado en embeddings junto con una red neuronal convolucional (CNN) residual. Este sistema también es utilizado por el participante \cite{nperez}.
+\subsection{Blooming Embedding}
+Habitualmente las tecnicas de embedding usan un vocabulario de $N$ palabras conocidas a partir de la cual se crea una matriz de tamaño $N\times L$ donde $L$ será la longitud del vector que se quiere asignar a cada palabra, esto genera el problema de que el tamaño del embedding aumenta con las palabras del vocabulario, por otro lado las palabras que no se encuentren en el vocabulario deben ser asignadas tambien a algún vector para poder representar todos los textos posibles, se suele asignar un conjunto de filas de la matriz de embedding a palabras desconocidas para solventar este problema, no obstante genera una nueva problemática ya que palabras muy diferentes pueden ser asignadas a la misma representación por lo que puede llevar a error.\\
+
+Blooming Embedding es un tipo de embedding donde no se tiene un vocabulario de palabras conocidas con una representación muy precisa a cambio de tener toda la matriz para asignar cualquier palabra, esto se hace aplicando una función hash para crear categorías donde cada palabra va a una representación mas o menos aproximada de su significado. Esta representación permite obtener representaciones para una gran cantidad de palabras a la vez que mantiene un tamaño reducido y elimina parcialmente el problema de las palabras desconocidas. Para terminar de solventar el problema de palabras muy variadas que van a la misma representación se usa una segunda representación basada en otra función hash diferente y al combinar ambas representaciones se obtiene una representación que con alta probabilidad es única para cada palabra con todas las ventajas descritas anteriormente.
+
+\subsection{Residual Convolutional Neural Network}
+Una red neuronal convolucional es un tipo de red neuronal que presenta una arquitectura basada en diferentes tipos de capas, la entrada de estas redes es un tensor, que en el caso que corresponde al sistema serán diferentes subconjuntos de tokens representados a traves del embedding, los diferentes tipos de capas son:
+\begin{itemize}
+\item Convolución: Este tipo de capas tiene como entrada de cada nodo un tensor y permite extraer características dando como resultado una matriz de características para cada nodo, el tamaño del tensor de entrada y la salida no tienen por que coincidir.
+\item Muestreo: En estas capas se reduce la dimensión de su entrada aplicando algún tipo de función como el máximo o la media.
+\item Completamente Conectada: Es una capa donde cada salida anterior se conecta a cada entrada de cada nodo de esta.
+\item Clasificación: Esta sería una capa de salida para la red neuronal, la salida está determinada por vector de peso e influencia que se irá ajustando a medida que entrene.
+\end{itemize}
+
+Un ejemplo que ilustra las diferentes capas se puede ver en la Figura \ref{fig:CNN}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{img/CNN.png}\\
+\caption{Capas Red Neuronal Recurrente}
+\label{fig:CNN}
+\end{figure}
+
+El concepto residual se puede aplicar a diferentes tipos de redes neuronales, implica que la salida de una capa pueda dirigirse no solo a la siguiente sino a otra capa saltándose varias de ellas.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % DESARROLLO %
@@ -363,7 +424,7 @@ En primer lugar se realizará una fase de selección de modelo donde se ejecutan l
 
 La entrada del sistema serán textos anotados en formato brat para el entrenamiento, validación y test. La salida del sistema serán los modelos, predicciones y puntuaciones durante la fase de entrenamiento y únicamente las predicciones en la fase de explotación del modelo.
 \section{Esquema del sistema}\label{esquema}
-Un diagrama general del sistema planteado se presenta en la figura \ref{fig:flujo}
+Un diagrama general del sistema planteado se presenta en la Figura \ref{fig:flujo}
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.65]{img/diagrama_de_flujo.png}\\
@@ -390,7 +451,9 @@ Por otro lado, los diferentes módulos que se encargan de tratar la información y
 
 \cleardoublepage % empezamos en página impar
 \chapter{Metodología y Tecnologías}
-En este apartado se muestra la metodología software seguida, en este caso ha sido metodología ágil, tratando de seguir los principios ágiles\cite{Agile} sin hacer uso de un marco concreto de trabajo dado el tamaño del equipo.
+En este apartado se muestra la metodología software seguida así como las tecnologías necesarias en la implementación del sistema y la herramienta de detección de entidades nombradas.
+\section{Metodología}
+Se ha optado por seguir la metodología Agile, tratando de seguir los principios del Manifiesto Agile \cite{Agile} sin hacer uso de un marco concreto de trabajo dado el tamaño del equipo.
 
 Este sistema ha sido desarrollado como un proceso de software iterativo, se han definido diversas funcionalidades del sistema que quedan recogidas y valoradas en las siguientes historias de usuario:\\
 
@@ -511,12 +574,85 @@ Para compensar las deficiencias del modelo se analizan las etiquetas en las que 
 
 En este punto se plantea incorporar parte del sistema a una herramienta que pueda generalizar el trabajo llevado a cabo, incorporando las HU10 y HU11.
 \subsection{Iteración 4}
-Dado que la mayoría de utilidades ya estaban implementadas el mayor reto fue la gestión de parámetros de entrada y la lectura y escritura desde un contenedor docker. No obstante con la ayuda de librerías y volúmenes se consiguen superar estas dificultades y se completan las HU10 y HU11 creando así una herramienta de automatización para una parte de la tarea.
+Dado que la mayoría de utilidades ya estaban implementadas el mayor reto fue la gestión de parámetros de entrada y la lectura y escritura desde un contenedor docker. No obstante con la ayuda de librerías y volúmenes se consiguen superar estas dificultades y se completan las HU10 y HU11, creando así una herramienta de automatización para una parte de la tarea.
 
+\section{Tecnologías}
+Para la implementación del sistema se hace uso de diferentes tecnologías y herramientas que se describen en esta sección. El lenguaje seleccionado para la implementación ha sido Python.\\
+
+\subsection{Python}
+Python es un lenguaje de programación interpretado muy usado en la actualidad, una de las cualidades que lo definen es su legibilidad. Puede ser usado con un paradigma imperativo, orientado a objetos y en menor medida funcional.
+
+Dentro de este lenguaje se hace uso de diversas librerías y herramientas, algunas de ellas se describen en más detalle posteriormente, algunas de ellas son:
+
+\begin{itemize}
+\item re: Módulo de expresiones regulares nativo de python.
+\item jupyter: Entorno web de desarrollo.
+\item spaCy: Herramienta avanzada de PLN.
+\item loggin: Módulo de generación y gestión de logs jerárquicos, es nativo de python.
+\item shutil: Módulo que permite mover y copiar ficheros, es nativo de python.
+\item os: Módulo que permite usar funcionalidad del sistema operativo, es nativo de python.
+\item io: Módulo de gestión de ficheros que permite la lectura y escritura en diferentes formatos, es nativo de python.
+\end{itemize}
+
+\subsection{Jupyter}
+La herramienta Jupyter es un entorno web open-source donde se puede ejecutar código y visualizar los resultados de una forma sencilla y estructurada. Esta herramienta es usada habitualmente por profesionales de ciencia de datos para limpiar, transformar y visualizar datos así como entrenar modelos entre otras tareas.\\
+
+Hace uso de ficheros con extensión .ipynb a los que se llama notebook. Se usan diferentes notebooks para las distintas partes del sistema.
+
+\subsection{SpaCy}
+SpaCy es una herramienta open-source de PLN creada bajo la premisa de obtener software listo para producción, incluye funcionalidades como la tokenización, el reconocimiento de entidades nombradas (NER), el etiquetado gramatical (part-of-speech tagging) o la segmentación por oraciones entre otras.\\
+
+El uso de esta herramienta en este caso ha sido para la tokenización y el reconocimiento de entidades nombradas.\\
+
+Esta herramienta contiene diferentes modelos preentrenados para las diferentes tareas y para múltiples idiomas, pudiendo reentrenarse para ajustarse a los datos de la tarea en concreto.
+
+\subsection{Docker}
+Docker es una tecnología que permite la virtualización a nivel de sistema operativo en unos paquetes que se denominan contenedores, estos permiten empaquetar software y sus dependencias de forma sea reproducible, escalable e independiente de la plataforma que ejecute el contenedor.\\
+
+Se hace uso de esta tecnología para la herramienta de etiquetado automático, permitiendo a cualquier usuario hacer uso de ella sin necesidad de instalar software a parte de docker.
+
+\subsection{LaTeX}
+LaTeX es un software de generación de documentos. A diferencia de otras herramientas de creación de documentos que siguen una filosofía de ver directamente el estilo del documento a medida que lo escribes, en LaTeX se escribe en texto plano con una sintaxis determinada de etiquetas que posteriormente se interpretarán para obtener un documento generado con el estilo correspondiente.\\
+
+Este documento ha sido generado usando \LaTeX .
 
 \cleardoublepage % empezamos en página impar
 \chapter{Descripción informática}
 En este capítulo se detalla la implementación del sistema y de la herramienta de entrenamiento y detección de entidades.
+\section{Casos de Uso}
+Existen dos casos de uso que aplican tanto en el sistema planteado para la tarea como para la herramienta de anotación automática, estos casos son el entrenado de modelos y la anotación de textos haciendo uso de esos modelos por parte del usuario. Existe también un caso de uso que aplica únicamente al sistema de la tarea, este caso es extraer la puntuación para una salida del sistema.
+\subsection{Entrenamiento de un Modelo}
+Para obtener un modelo entrenado el usuario debe proporcionar al sistema los textos anotados con los que se desea entrenar, en ese momento puede ejecutar en el sistema un entrenamiento que tendrá como resultado la obtención de un modelo listo para su uso. Una representación de este caso de uso puede verse en la Figura \ref{fig:caso-train}.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{img/caso-train.png}\\
+\caption{Entrenamiento de un modelo}
+\label{fig:caso-train}
+\end{figure}
+
+\subsection{Anotación de Textos}
+Partiendo de textos sin anotar y un modelo ya entrenado un usuario puede hacer uso del sistema para generar anotaciones sobre estos textos. La finalidad a la que está destinada la tarea MEDDOCAN es precisamente este caso de uso.\\
+
+Un usuario debe en primer lugar proporcionar los textos sin anotar al sistema e indicar el modelo con el que se quiere anotar, posteriormente el usuario ejecutará una predicción del sistema que generará una copia de los textos originales junto con su anotación correspondiente como puede verse esquematizado en la Figura \ref{fig:caso-pred}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{img/caso-pred.png}\\
+\caption{Anotación de textos a partir de un modelo}
+\label{fig:caso-pred}
+\end{figure}
+\subsection{Obtener Puntuación}
+En este caso el usuario ha obtenido el resultado del sistema en un directorio con los textos anotados, además de esto debe incorporar los mismos textos anotados de la forma correcta ya que será la referencia usada para la puntuación.\\
+
+El usuario debe ejecutar la parte del sistema correspondiente a Score, esta a su vez hará uso de la herramienta proporcionada en la tarea MEDDOCAN \cite{Score} que dejará como resultado la puntuación, este caso queda recogido en la Figura \ref{fig:caso-score}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{img/caso-score.png}\\
+\caption{Obtener puntuación para una salida}
+\label{fig:caso-score}
+\end{figure}
+
 \section{Módulos del sistema}
 A continuación, se detallan los procesos que se realizan en cada uno de los módulos, aunque se ha implementado un notebook para cada módulo, la herramienta puede sustituir los encargados de entrenar y predecir.
 \subsection{Train}\label{train}
@@ -526,11 +662,18 @@ Salida: Los modelos que se deseen guardados en el directorio destino.\\
 
 En primer lugar se encuentra el entrenamiento del modelo, antes de comenzar deben prepararse los datos de la forma que Spacy puede usarlos, por ello partimos de dos ficheros, el texto plano y la anotación en brat.\\
 \subsubsection{Estructura de datos de entrada}
-En primer lugar se lee el fichero de texto y se sustituyen todos los saltos de línea por espacios para evitar que se tomen las localizaciones de forma incorrecta. Tras ello se procede a leer el fichero de anotaciones, de este se extraen las etiquetas y localizaciones de las mismas en una lista donde cada elemento es tupla con la estructura (inicio, final, etiqueta) y se corresponde a una entidad.\\
+En primer lugar se lee el fichero de texto y se sustituyen todos los saltos de línea por espacios para evitar que se tomen las localizaciones de forma incorrecta. Tras ello se procede a leer el fichero de anotaciones, de este se extraen las etiquetas y localizaciones de las mismas en una lista donde cada elemento es una tupla con la estructura (inicio, final, etiqueta) y se corresponde a una entidad.\\
 
-Cada caso de entrenamiento es una tupla de dos elementos, en primer lugar se encuentra el texto y en segundo lugar se encuentra un diccionario con una sola clave llamada \textit{entities} cuyo valor es una lista con todas las entidades anotadas para el texto.\\
+Cada caso de entrenamiento es una tupla de dos elementos, en primer lugar se encuentra el texto y en segundo lugar se encuentra un diccionario con una sola clave llamada \textit{entities} cuyo valor es una lista con todas las entidades anotadas para el texto. Un ejemplo de esta estructura para un fragmento de uno de los textos de ejemplo se muestra en la Figura \ref{fig:tag-example}.\\
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45]{img/tag-example.png}\\
+\caption{Ejemplo de entrada para un texto}
+\label{fig:tag-example}
+\end{figure}
 \subsubsection{Entrenamiento del modelo}
-En primer lugar se carga el modelo de Spacy en español y se incluye en el pipeline la pieza de NER(Named Entity Recognition) proporcionada por Spacy.\\
+En primer lugar se carga el modelo de Spacy en español y se incluye en el pipeline la pieza de NER (Named Entity Recognition) proporcionada por Spacy.\\
 
 Para cada iteración se actualiza el modelo entrenando con todos los textos y entidades anotadas, indicando el parámetro \textit{drop} que se corresponde al dropout de la red neuronal que usa el modelo para evitar sobreentrenamiento, mientras más bajo sea este parámetro más difícil le resulta memorizar los datos.\\
 
@@ -580,13 +723,13 @@ El diccionario es el siguiente:\\
     "URL_WEB": [r'(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/)']
 }
 \end{lstlisting}
-Las expresiones están formuladas de manera que eligiendo el primer grupo de la expresión se queda con el texto correspondiente a la etiqueta, de manera que para cada texto se extraen una lista de diccionarios que tienen como claves \textit{tag}, \textit{match}, \textit{ini} y \textit{fin} con todas las partes que encajen en una expresión, eligiendo el primer grupo como \textit{match}.
+Las expresiones están formuladas de manera que eligiendo el primer grupo de la expresión se queda con el texto correspondiente a la etiqueta, de forma que para cada texto se extraen una lista de diccionarios que tienen como claves \textit{tag}, \textit{match}, \textit{ini} y \textit{fin} con todas las partes que encajen en una expresión, eligiendo el primer grupo como \textit{match}.
 \subsubsection{Combinación de entidades}
 Una vez se tiene esta lista de diccionarios para el texto se debe comprobar que no se duplican etiquetas de la anotación inicial, para ello se lee la anotación inicial y se generan dos conjuntos de etiquetas encontradas, cada elemento del conjunto corresponde a una etiqueta encontrada siendo representada por la cadena de texto \textit{entidad inicio final}.\\
 
 Se resta al conjunto de las expresiones regulares el conjunto de las anotaciones originales, de forma que no repita una anotación si ya existe.\\
 
-Finalmente, se cuenta el número de etiquetas en la anotación original para continuar con la numeración y se escribe las etiquetas de las expresiones regulares al final del fichero ann.
+Finalmente, se cuenta el número de etiquetas en la anotación original para continuar con la numeración y se escriben las etiquetas de las expresiones regulares al final del fichero ann.
 \subsection{Score}
 Prerequisito: Directorio con textos anotados para valorar y otro directorio con los mismos textos anotados como referencia válida en el directorio correspondiente.\\
 Salida: Informe sobre las métricas asociadas a la anotación.\\
@@ -610,7 +753,7 @@ De los puntos \ref{train} y \ref{pred} se crea un módulo python \textit{spacy\_n
 
 Este módulo ha sido empaquetado en una imagen de docker que parte de la imagen de miniconda junto con un script \textit{main.py} que gestiona los parámetros de la llamada y realiza la acción correspondiente.\\
 
-En la figura \ref{fig:docker} se puede ver de forma general la estructura de la herramienta.\\
+En la Figura \ref{fig:docker} se puede ver de forma general la estructura de la herramienta.\\
 
 \begin{figure}[H]
 \centering
@@ -649,9 +792,9 @@ docker run -v ./local_path:/container_path docker_image -p -m /container_path/mo
 \label{section:res}
 En este apartado se muestran las puntuaciones obtenidas en los diferentes puntos del desarrollo para cada una de las tareas, así como el análisis de las puntuaciones que permiten ver los puntos débiles del sistema.
 \section{Corpus}
-Los datos anotados que se proporcionan en la tarea se dividen en tres grupos, un conjunto de entrenamiento que contiene 500 textos anotados, uno de desarrollo que usaremos como conjunto de validación compuesto por 250 textos anotados y un conjunto de test que se usará una vez únicamente para obtener una puntuación final y que tiene 250 textos anotados. Adicionalmente se proporciona un conjunto llamada background que se compone de 3.751 textos, puesto que no están anotados no se usarán.\\
+Los datos anotados que se proporcionan en la tarea se dividen en tres grupos, un conjunto de entrenamiento que contiene 500 textos anotados, uno de desarrollo que usaremos como conjunto de validación compuesto por 250 textos anotados y un conjunto de test que se usará una vez únicamente para obtener una puntuación final y que tiene 250 textos anotados. Adicionalmente, se proporciona un conjunto llamada background que se compone de 3.751 textos, puesto que no están anotados no se usarán.\\
 
-El número de etiquetas que se encuentra en cada conjunto se puede ver en la tabla \ref{tab:tags-set}. La primera apreciación es que existen 7 entidades que no existen en los textos y una entidad que solo dispone de una ocurrencia en el set de desarrollo, por lo que al no ocurrir en el conjunto de entrenamiento será imposible detectarlas usando el modelo directamente. Quedan por tanto 21 entidades para tratar.
+El número de etiquetas que se encuentra en cada conjunto se puede ver en la Tabla \ref{tab:tags-set}. La primera apreciación es que existen 7 entidades que no existen en los textos y una entidad que solo dispone de una ocurrencia en el set de desarrollo, por lo que al no ocurrir en el conjunto de entrenamiento será imposible detectarlas usando el modelo directamente. Quedan por tanto 21 entidades para tratar.
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|l|l|}
@@ -698,46 +841,46 @@ Para valorar la calidad de un modelo se pueden usar distintas métricas sobre las
 Muchas de ellas están basadas en los siguientes conceptos, para una etiqueta pueden darse los casos:
 
 \begin{itemize}
-\item Positivo (P): Se elige la etiqueta y es la correcta.
+\item Verdadero Positivo (TP): Se elige la etiqueta y es la correcta.
 \item Falso Positivo (FP): Se elige la etiqueta y no es correcta.
-\item Negativo (N): No se elige la etiqueta y en efecto no es la correcta.
+\item Verdadero Negativo (TN): No se elige la etiqueta y en efecto no es la correcta.
 \item Falso Negativo (FN): No se elige la etiqueta pero esta realmente es la correcta.
 \end{itemize}
 
 \subsubsection{Leak}
 Este valor se refiere al porcentaje de entidades que no han sido etiquetadas a pesar de que realmente pertenecen a alguna categoría.
 \subsubsection{Precisión}
-\[
-\frac{P}{P+FP}
-\]
-Esta métrica es una de las más simples y más usadas, se calcula tomando los positivos y dividiendo entre la suma de los positivos y los falsos positivos. Esta métrica nos informa de cuantas veces se equivoca el modelo al predecir una etiqueta.\\
+Esta métrica es una de las más simples y más usadas, se calcula tomando los verdaderos positivos y dividiendo entre la suma de los verdaderos positivos y los falsos positivos como se indica en la Ecuación \ref{eq:prec}. Esta métrica nos informa de cuantas veces se equivoca el modelo al predecir una etiqueta.\\
+\begin{equation} \label{eq:prec}
+\frac{TP}{TP+FP}
+\end{equation}
 
-Esta forma de puntuar tiene el inconveniente de que si las etiquetas tienen una volumen de aparición muy diferente es probable que aunque el valor sea alto, el modelo esté sesgado a predecir etiquetas de mayor volumen de aparición.
+Esta forma de puntuar tiene el inconveniente de que si las etiquetas tienen un volumen de aparición muy diferente es probable que aunque el valor sea alto, el modelo esté sesgado a predecir etiquetas de mayor volumen de aparición.
 
 \subsubsection{Exhaustividad (Recall)}
 
-\[
-\frac{P}{P+FN}
-\]
-En este caso se calcula tomando los positivos y dividiendo entre la suma de positivos y falsos negativos. Esta métrica se usa para conocer cuantos de los valores reales de una categoría puede identificar el modelo.
+En este caso se calcula tomando los verdaderos positivos y dividiendo entre la suma de verdaderos positivos y falsos negativos como muestra la Ecuación \ref{eq:recall}. Esta métrica se usa para conocer cuántos de los valores reales de una categoría puede identificar el modelo.
+\begin{equation} \label{eq:recall}
+\frac{TP}{TP+FN}
+\end{equation}
 
 \subsubsection{F-Score (F1)}
-\[
+
+Esta métrica es la media armónica entre precisión y exhaustividad, su valor se encuentra entre 0 y 1, siendo 1 el mejor valor posible que indica una precisión y exhaustividad perfectas. La Ecuación \ref{eq:f1} muestra el cálculo de esta métrica.\\
+\begin{equation} \label{eq:f1}
 F1=2\cdot\frac{precision\cdot recall}{precision + recall}
-\]
+\end{equation}
 
-Esta métrica es la media armónica entre precisión y exhaustividad, su valor se encuentra entre 0 y 1, siendo 1 el mejor valor posible que indica una precisión y exhaustividad perfectas.\\
-
-Esta será la métrica de referencia durante la tarea ya que así lo indica la misma y que es habitual hacer uso de ella para determinar la calidad de los resultados en este tipo de problemas.
+Esta será la métrica de referencia, que se usó en la tarea MEDDOCAN y que es habitual hacer uso de ella para determinar la calidad de los resultados en este tipo de problemas.
 
 \section{Puntuaciones}
 En primer lugar se entrenó el modelo de Spacy usando los datos de entrenamiento, se recopilaron las puntuaciones proporcionadas por la herramienta de MEDDOCAN para todos los parámetros probados. Los parámetros fueron:\\
 Iteraciones: 5, 10, 15, 20, 25, 30, 35, 40\\
 Drop: 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45\\
 
-Las puntuaciones para la subtarea 1 son Leak, Precision, Recall y F1. La subtarea 2 tiene dos formas de puntuar, en la estricta tiene que coincidir la posición exacta de la entidad, mientras que en la forma combinada se da por valida si existen varias entidades que al combinarlas dan lugar a una válida. En este caso se presta mayor atención a la versión estricta y las métricas son Precision, Recall y F1. Siempre se toma como valor principal el F1.
+Las métricas para obtener las puntuaciones para la subtarea 1 son Leak, Precision, Recall y F1. La subtarea 2 tiene dos formas de puntuar, en la estricta tiene que coincidir la posición exacta de la entidad, mientras que en la forma combinada se da por valida si existen varias entidades que al combinarlas dan lugar a una válida. En este caso se presta mayor atención a la versión estricta y las métricas son Precision, Recall y F1. Siempre se toma como valor principal el F1.
 \subsection{Conjunto de Validación}
-En primer lugar se analizó la puntuación de los modelos en el conjunto de validación, el resultado de la primera tarea se puede ver en la tabla \ref{tab:tabla-dev} donde se muestran los 15 con mejor puntuación F1, de la misma forma en la tabla \ref{tab:tabla-dev-2} se muestran los resultados de la segunda tarea según el criterio estricto.\\
+En primer lugar se analizó la puntuación de los modelos en el conjunto de validación, el resultado de la primera tarea se puede ver en la Tabla \ref{tab:tabla-dev} donde se muestran los 15 con mejor puntuación F1. En la Tabla \ref{tab:tabla-dev-2} se muestran los resultados de la segunda tarea según el criterio estricto.\\
 
 
 \begin{table}[H]
@@ -790,7 +933,7 @@ iteraciones=15\_drop=0.2              & 0,919                                   
 \end{table}
 Dado que el mejor modelo no se encuentra en el límite de los parámetros probados, parece que el conjunto de valores posibles es válido y se elige como modelo de referencia actual al que tiene 30 iteraciones con valor de drop 0.2.\\
 
-Tras este análisis se procede a comprobar las etiquetas que no reconoce el modelo de referencia en busca de posibles patrones en los errores, esta información se pueden encontrar en la tabla \ref{tab:tabla-miss}
+Tras este análisis se procede a comprobar las etiquetas que no reconoce el modelo de referencia en busca de posibles patrones en los errores, esta información se pueden encontrar en la Tabla \ref{tab:tabla-miss}
 
 \begin{table}[H]
 \centering
@@ -821,9 +964,9 @@ NUMERO\_FAX                             & 3                                    \
 \caption{\label{tab:tabla-miss}Etiquetas no encontradas sin postproceso}
 \end{table}
 
-Con esta información se realiza un estudio de las posibles expresiones regulares para mejorar el sistema centrándose en la entidad SEXO\_SUJETO\_ASISTENCIA.\\
+Con esta información se realiza un estudio de las posibles expresiones regulares para mejorar el sistema, se puede observar amplio margen de mejora en las entidades SEXO\_SUJETO\_ASISTENCIA y CALLE.\\
 
-La implementación del postproceso que se aplica sobre los resultados anteriores lleva a los resultados de las tablas \ref{tab:tabla-dev-pos} y \ref{tab:tabla-dev-2-pos} correspondientes a la subtarea 1 y 2 respectivamente una vez se ha realizado el postproceso.
+La implementación del postproceso que se aplica sobre los resultados anteriores lleva a los resultados de las Tablas \ref{tab:tabla-dev-pos} y \ref{tab:tabla-dev-2-pos} correspondientes a la subtarea 1 y 2 respectivamente una vez se ha realizado el postproceso.
 
 
 \begin{table}[H]
@@ -876,7 +1019,7 @@ iteraciones=15\_drop=0.2              & 0,92007                                 
 
 Como se puede observar la puntuación mejora notablemente, quedando finalmente el mismo modelo de referencia con valor F1 de $0,91364$ en la subtarea 1 y $0,92034$ en la subtarea 2 para el conjunto de validación.\\
 
-De la misma forma que antes se analizan las etiquetas no encontradas para el modelo de referencia, en la tabla \ref{tab:tabla-miss-pos} se puede observar que la mayoría de las etiquetas de la clase SEXO\_SUJETO\_ASISTENCIA han sido corregidas gracias a las expresiones regulares.
+De la misma forma que antes se analizan las etiquetas no encontradas para el modelo de referencia, en la Tabla \ref{tab:tabla-miss-pos} se puede observar que la mayoría de las etiquetas de la clase SEXO\_SUJETO\_ASISTENCIA han sido corregidas gracias a las expresiones regulares.
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|}
@@ -907,7 +1050,7 @@ NUMERO\_FAX                             & 3                                    \
 \end{table}
 
 \subsection{Conjunto de Test}
-Una vez se ha obtenido un resultado satisfactorio en el conjunto de validación, se mantiene el modelo de referencia, para contrastar que sea el que mejor generaliza los resultados. Se muestran a continuación las puntuaciones sobre el conjunto de test, tras ello no se realizarán más iteraciones ni se tendrán en cuenta estos datos para la mejora del modelo. En las tablas \ref{tab:tabla-test-pos} y \ref{tab:tabla-test-2-pos} se muestran los resultados de los mejores modelos para las subtareas 1 y 2 con postproceso.
+Una vez se ha obtenido un resultado satisfactorio en el conjunto de validación, se mantiene el modelo de referencia para contrastar que sea el que mejor generaliza los resultados. Se muestran a continuación las puntuaciones sobre el conjunto de test, tras ello no se realizarán más iteraciones ni se tendrán en cuenta estos datos para la mejora del modelo. En las Tablas \ref{tab:tabla-test-pos} y \ref{tab:tabla-test-2-pos} se muestran los resultados de los mejores modelos para las subtareas 1 y 2 con postproceso.
 
 \begin{table}[H]
 \centering
@@ -958,25 +1101,25 @@ iteraciones=40\_drop=0.4              & 0,92043                                 
 \end{table}
 El modelo de referencia, con 30 iteraciones y drop de 0.2, queda con la mejor puntuación en ambas tareas obteniendo un resultado de $0,9186$ y $0,92682$ para la subtarea 1 y 2 respectivamente, por tanto se selecciona como modelo definitivo.\\
 
-Según la clasificación general\cite[pag.~9, pag.~12]{Guidelines} de la tarea. En la subtarea 1 se habría quedado justo por encima de la posición 11, mientas que en la subtarea 2 la posición sería la 13 de un total de 18 participantes.\\
+Según la clasificación general \cite{Guidelines} de la tarea, en la subtarea 1 se habría quedado justo por encima de la posición 11, mientas que en la subtarea 2 la posición sería la 13 de un total de 18 participantes.\\
 
 Dados los valores de precisión y recall, parece que se eligen adecuadamente las etiquetas que se predicen pero no se detectan adecuadamente todas las entidades de los textos, por lo que queda un valor algo más elevado en precisión y menor en recall.\\
 
-En general los valores obtenidos son bastante buenos, dado que el modelo base que plantean obtiene unos resultados de $0.42668$ y $0.47181$ en la puntuación F1 para las subtareas 1 y 2 respectivamente, se supera notablemente esta linea base.
+En general los valores obtenidos son bastante buenos, dado que el modelo base que plantean obtiene unos resultados de $0.42668$ y $0.47181$ en la puntuación F1 para las subtareas 1 y 2 respectivamente, se supera notablemente esta línea base.
 
 
 \cleardoublepage % empezamos en página impar
 \chapter{Conclusiones}
-En este estudio se puede observar que un modelo preentrenado puede dar buenos resultados al adaptarlo al contexto usando datos de ejemplo, esta estrategia bastante útil dado que entrenar un modelo desde el comienzo puede llevar a sobre ajuste de los datos de entrenamiento más fácilmente, además de que el modelo base ya da algunos resultados positivos desde el comienzo, dando lugar a un punto de partida mejor que empezar desde cero.\\
+El uso de la herramienta spaCy lleva a la conclusión de que partir de un modelo preentrenado es una buena idea ya que tiene información previa del lenguaje en el que están escritos los documentos por lo que con un reentrenamiento de su módulo de detección de entidades ofrece buenos resultados en un contexto que puede no haber visto nunca antes el modelo y generaliza estos resultados de forma correcta.\\
 
 Parece que los resultados de esta tarea son realmente buenos en general, el conjunto de datos puede que sea demasiado homogéneo o sintético de forma que en un escenario más realista los resultados podrían empeorar.\\
 
-Dado que existen etiquetas que no se encuentran anotadas en los datos proporcionados y que tampoco se pueden abarcar por expresiones regulares, el sistema nunca será capaz de detectarlas ni conoce de la existencia de esas etiquetas.
+Dado que existen etiquetas que no se encuentran anotadas en los datos proporcionados y que tampoco se pueden detectar con expresiones regulares, el sistema nunca será capaz de detectarlas ni conoce de la existencia de esas etiquetas.
 \section{Posibles mejoras}
 En el sistema propuesto se han detectado carencias o puntos de mejora, algunas ideas de trabajo futuro son:
 \begin{itemize}
 \item Mejora de las expresiones regulares.
-\item Prueba de otros modelos y sistemas para mejorar al actual.
+\item Prueba de otros modelos y sistemas para mejorar el actual.
 \item Combinar distintos modelos para tomar decisiones sobre las etiquetas.
 \item Realizar una posible API para la herramienta que permita llamadas para un modelo con un texto y devuelva las etiquetas.
 \end{itemize}
